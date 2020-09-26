@@ -14,21 +14,21 @@ typedef struct pe
   int16_t type;
   struct pe_coff_header *coff_header;
   void *optional_header;
-  struct pe_section_header *section_header;
+  struct pe_section_header *section_header[];
 } pe_t;
 
 typedef struct pe32
 {
   struct pe_coff_header *coff_header;
   struct pe32_optional_header *optional_header;
-  struct pe_section_header *section_header;
+  struct pe_section_header *section_header[];
 } pe32_t;
 
 typedef struct pe64
 {
   struct pe_coff_header *coff_header;
   struct pe64_optional_header *optional_header;
-  struct pe_section_header *section_header;
+  struct pe_section_header *section_header[];
 } pe64_t;
 
 typedef struct pe_data_directory
@@ -49,37 +49,37 @@ typedef struct pe_coff_header
 } pe_coff_header_t;
 
 #define PE_OPTIONAL_HEADER_STANDARD_FIELDS \
-  int16_t magic;                           \
-  int8_t major_linker_version;             \
-  int8_t minor_linker_version;             \
-  int32_t size_of_code;                    \
-  int32_t size_of_initialized_data;        \
-  int32_t size_of_unitialized_data;        \
-  int32_t entry_point;                     \
-  int32_t base_of_code
+  uint16_t magic;                          \
+  uint8_t major_linker_version;            \
+  uint8_t minor_linker_version;            \
+  uint32_t size_of_code;                   \
+  uint32_t size_of_initialized_data;       \
+  uint32_t size_of_unitialized_data;       \
+  uint32_t entry_point;                    \
+  uint32_t base_of_code
 
 #define PE_OPTIONAL_HEADER_WINDOWS_FIELDS(field_type) \
   field_type image_base;                              \
-  int32_t section_alignment;                          \
-  int32_t file_alignment;                             \
-  int16_t major_os_version;                           \
-  int16_t minor_os_version;                           \
-  int16_t major_image_version;                        \
-  int16_t minor_image_version;                        \
-  int16_t major_subsystem_version;                    \
-  int16_t minor_subsystem_version;                    \
-  int32_t win32_version_value;                        \
-  int32_t size_of_image;                              \
-  int32_t size_of_headers;                            \
-  int32_t checksum;                                   \
-  int16_t subsystem;                                  \
-  int16_t dll_characteristics;                        \
+  uint32_t section_alignment;                         \
+  uint32_t file_alignment;                            \
+  uint16_t major_os_version;                          \
+  uint16_t minor_os_version;                          \
+  uint16_t major_image_version;                       \
+  uint16_t minor_image_version;                       \
+  uint16_t major_subsystem_version;                   \
+  uint16_t minor_subsystem_version;                   \
+  uint32_t win32_version_value;                       \
+  uint32_t size_of_image;                             \
+  uint32_t size_of_headers;                           \
+  uint32_t checksum;                                  \
+  uint16_t subsystem;                                 \
+  uint16_t dll_characteristics;                       \
   field_type size_of_stack_reserve;                   \
   field_type size_of_stack_commit;                    \
   field_type size_of_head_reserve;                    \
   field_type size_of_head_commit;                     \
-  int32_t loader_flags;                               \
-  int32_t number_of_rva_and_sizes
+  uint32_t loader_flags;                              \
+  uint32_t number_of_rva_and_sizes
 
 #define PE_OPTIONAL_HEADER_DATA_DIRECTORIES    \
   pe_data_directory_t export_table;            \
@@ -103,29 +103,29 @@ typedef struct pe32_optional_header
 {
   PE_OPTIONAL_HEADER_STANDARD_FIELDS;
   int32_t base_of_data;
-  PE_OPTIONAL_HEADER_WINDOWS_FIELDS(int32_t);
+  PE_OPTIONAL_HEADER_WINDOWS_FIELDS(uint32_t);
   PE_OPTIONAL_HEADER_DATA_DIRECTORIES;
 } pe32_optional_header_t;
 
 typedef struct pe64_optional_header
 {
   PE_OPTIONAL_HEADER_STANDARD_FIELDS;
-  PE_OPTIONAL_HEADER_WINDOWS_FIELDS(int64_t);
+  PE_OPTIONAL_HEADER_WINDOWS_FIELDS(uint64_t);
   PE_OPTIONAL_HEADER_DATA_DIRECTORIES;
 } pe64_optional_header_t;
 
 typedef struct pe_section_header
 {
   char name[8];
-  int32_t virtual_size;
-  int32_t virtual_address;
-  int32_t size_of_raw_data;
-  int32_t pointer_to_raw_data;
-  int32_t pointer_to_relocations;
-  int32_t pointer_to_line_numbers;
-  int16_t number_of_relocations;
-  int16_t number_of_line_numbers;
-  int32_t characteristics;
+  uint32_t virtual_size;
+  uint32_t virtual_address;
+  uint32_t size_of_raw_data;
+  uint32_t pointer_to_raw_data;
+  uint32_t pointer_to_relocations;
+  uint32_t pointer_to_line_numbers;
+  uint16_t number_of_relocations;
+  uint16_t number_of_line_numbers;
+  uint32_t characteristics;
 } pe_section_header_t;
 
 enum pe_section_flags

@@ -5,14 +5,16 @@
 pe_t *pe_parse(FILE *executable)
 {
     long int last_position;
+    pe_coff_header_t *coff_header;
 
     if (!executable)
     {
         return NULL;
     }
 
-    pe_t *pe = malloc(sizeof *pe);
-    pe->coff_header = malloc(sizeof(pe_coff_header_t));
+    coff_header = malloc(sizeof(pe_coff_header_t));
+    pe_t *pe = malloc(sizeof *pe + coff_header->number_of_sections * sizeof(pe_section_header_t *));
+    pe->coff_header = coff_header;
 
     fread(pe->coff_header, sizeof(pe_coff_header_t), 1, executable);
 
@@ -35,7 +37,11 @@ pe_t *pe_parse(FILE *executable)
         return NULL;
     }
 
-    pe->section_header = malloc(sizeof(pe_section_header_t));
-    fread(pe->section_header, sizeof(pe_section_header_t), 1, executable);
+    for (int i = 0; i < coff_header->number_of_sections; i++)
+    {
+        pe->section_header[i] = malloc(sizeof(pe_section_header_t));
+        fread(pe->section_header[i], sizeof(pe_section_header_t), 1, executable);
+    }
+
     return pe;
 }
