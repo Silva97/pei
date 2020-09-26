@@ -11,5 +11,7 @@ void pe_show_type(pe_t *pe);
 void pe_show_coff(pe_t *pe);
 void pe32_show_optional_header(pe_t *pe);
 void pe64_show_optional_header(pe_t *pe);
+void pe_show_section_header(pe_t *pe, unsigned int section_number);
+void pe_show_all_section_headers(pe_t *pe);
 
 #endif /* _PEREADER_H */

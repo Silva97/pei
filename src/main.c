@@ -12,10 +12,10 @@ int main(int argc, char **argv)
 
   pe_show_type(pe);
 
-  puts("### COFF header ###\n");
+  puts("--- COFF header ---\n");
   pe_show_coff(pe);
 
-  puts("\n### Optional header ###\n");
+  puts("\n--- Optional header ---\n");
   if (pe->type == PE_MAGIC_32BIT)
   {
     pe32_show_optional_header(pe);
@@ -24,6 +24,8 @@ int main(int argc, char **argv)
   {
     pe64_show_optional_header(pe);
   }
+
+  pe_show_all_section_headers(pe);
 
   return 0;
 }
