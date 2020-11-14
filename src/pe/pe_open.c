@@ -3,7 +3,7 @@
 
 FILE *pe_open(char *filename)
 {
-  char *signature[PE_SIGNATURE_SIZE];
+  char signature[PE_SIGNATURE_SIZE];
   int32_t signature_address;
 
   FILE *executable = fopen(filename, "rb");
