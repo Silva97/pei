@@ -18,7 +18,7 @@ int pe_search_address_section(pe_t *pe, uint32_t address)
 
 int pe_search_entrypoint_section(pe_t *pe)
 {
-  if (pe->type == PE_MAGIC_32BIT)
+  if (pe->type == MAGIC_32BIT)
   {
     pe32_optional_header_t *optional_header = pe->optional_header;
     return pe_search_address_section(pe, optional_header->entry_point);

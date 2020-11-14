@@ -13,10 +13,10 @@ int main(int argc, char **argv)
   pe_show_type(pe);
 
   puts("--- COFF header ---\n");
-  pe_show_coff(pe);
+  pe_show_coff(pe, true);
 
   puts("\n--- Optional header ---\n");
-  if (pe->type == PE_MAGIC_32BIT)
+  if (pe->type == MAGIC_32BIT)
   {
     pe32_show_optional_header(pe);
   }

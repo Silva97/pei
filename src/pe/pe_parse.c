@@ -25,11 +25,11 @@ pe_t *pe_parse(FILE *executable)
 
   switch (pe->type)
   {
-  case PE_MAGIC_32BIT:
+  case MAGIC_32BIT:
     pe->optional_header = malloc(sizeof(pe32_optional_header_t));
     fread(pe->optional_header, sizeof(pe32_optional_header_t), 1, executable);
     break;
-  case PE_MAGIC_64BIT:
+  case MAGIC_64BIT:
     pe->optional_header = malloc(sizeof(pe64_optional_header_t));
     fread(pe->optional_header, sizeof(pe64_optional_header_t), 1, executable);
     break;
@@ -43,5 +43,6 @@ pe_t *pe_parse(FILE *executable)
     fread(pe->section_header[i], sizeof(pe_section_header_t), 1, executable);
   }
 
+  pe->file = executable;
   return pe;
 }

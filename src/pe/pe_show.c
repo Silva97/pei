@@ -1,30 +1,46 @@
 #include <string.h>
 #include <inttypes.h>
+#include <stdbool.h>
 #include "pereader.h"
 
 #define PALIGN "%-32s"
 
-#define PRINT_FIELD(structure, mask, field_name) \
-  printf(                                        \
-      PALIGN "%0*" mask "\n",                    \
-      #field_name,                               \
-      (int)sizeof structure->field_name * 2,     \
+#define PRINT_FIELD_N(structure, mask, field_name) \
+  printf(                                          \
+      PALIGN "%0*" mask,                           \
+      #field_name,                                 \
+      (int)sizeof structure->field_name * 2,       \
       structure->field_name)
+
+#define PRINT_FIELD(structure, mask, field_name) \
+  PRINT_FIELD_N(structure, mask "\n", field_name)
 
 #define PRINT_ALIGNED(text, mask, ...) \
   printf(PALIGN mask "\n", text, __VA_ARGS__)
+
+#define PRINT_FLAG(value, flag, show_separator) \
+  {                                             \
+    if (value & flag)                           \
+    {                                           \
+      if (show_separator)                       \
+      {                                         \
+        putchar('|');                           \
+      }                                         \
+      fputs(#flag, stdout);                     \
+    }                                           \
+  }
 
 void pe_show_type(pe_t *pe)
 {
   switch (pe->type)
   {
-  case PE_MAGIC_32BIT:
+  case MAGIC_32BIT:
     PRINT_ALIGNED("type", "%s", "32-bit");
     break;
-  case PE_MAGIC_64BIT:
+  case MAGIC_64BIT:
     PRINT_ALIGNED("type", "%s", "64-bit");
     break;
-  case PE_MAGIC_ROM:
+  case MAGIC_ROM:
     PRINT_ALIGNED("type", "%s", "ROM");
     break;
   default:
@@ -33,15 +49,41 @@ void pe_show_type(pe_t *pe)
   }
 }
 
-void pe_show_coff(pe_t *pe)
+void pe_show_coff_characteristics(pe_t *pe, bool verbose)
 {
-  PRINT_FIELD(pe->coff_header, "x", machine);
+  if (!verbose)
+  {
+    PRINT_FIELD(pe->coff_header, "x", characteristics);
+    return;
+  }
+
+  PRINT_FIELD_N(pe->coff_header, "x", characteristics);
+  fputs(" (", stdout);
+  PRINT_FLAG(pe->coff_header->characteristics, RELOCS_STRIPPED, false);
+  PRINT_FLAG(pe->coff_header->characteristics, EXECUTABLE_IMAGE, true);
+  PRINT_FLAG(pe->coff_header->characteristics, LINE_NUMS_STRIPPED, true);
+  PRINT_FLAG(pe->coff_header->characteristics, LOCAL_SYMS_STRIPPED, true);
+  PRINT_FLAG(pe->coff_header->characteristics, AGGRESSIVE_WS_TRIM, true);
+  PRINT_FLAG(pe->coff_header->characteristics, LARGE_ADDRESS_AWARE, true);
+  PRINT_FLAG(pe->coff_header->characteristics, BYTES_REVERSED_LO, true);
+  PRINT_FLAG(pe->coff_header->characteristics, BIT32_MACHINE, true);
+  PRINT_FLAG(pe->coff_header->characteristics, DEBUG_STRIPPED, true);
+  PRINT_FLAG(pe->coff_header->characteristics, REMOVABLE_RUN_FROM_SWAP, true);
+  PRINT_FLAG(pe->coff_header->characteristics, NET_RUN_FROM_SWAP, true);
+  PRINT_FLAG(pe->coff_header->characteristics, SYSTEM, true);
+  PRINT_FLAG(pe->coff_header->characteristics, UP_SYSTEM_ONLY, true);
+  PRINT_FLAG(pe->coff_header->characteristics, BYTES_REVERSED_HI, true);
+  fputs(")\n", stdout);
+}
+
+void pe_show_coff(pe_t *pe, bool verbose)
+{
   PRINT_FIELD(pe->coff_header, "x", number_of_sections);
   PRINT_FIELD(pe->coff_header, "x", time_date_stamp);
   PRINT_FIELD(pe->coff_header, "x", pointer_to_symbol_table);
   PRINT_FIELD(pe->coff_header, "x", number_of_symbols);
   PRINT_FIELD(pe->coff_header, "x", size_of_optional_header);
-  PRINT_FIELD(pe->coff_header, "x", characteristics);
+  pe_show_coff_characteristics(pe, verbose);
 }
 
 void pe32_show_optional_header(pe_t *pe)
