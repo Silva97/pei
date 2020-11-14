@@ -7,6 +7,10 @@ FILE *pe_open(char *filename)
   int32_t signature_address;
 
   FILE *executable = fopen(filename, "r+b");
+  if (!executable)
+  {
+    return NULL;
+  }
 
   fseek(executable, PE_SIGNATURE_ADDRESS_OFFSET, SEEK_SET);
   fread(&signature_address, sizeof signature_address, 1, executable);
