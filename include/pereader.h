@@ -14,6 +14,7 @@ typedef struct pe_block
 
 FILE *pe_open(char *filename);
 pe_t *pe_parse(FILE *executable);
+void pe_write_header(pe_t *pe);
 void pe_seek(pe_t *pe, long int offset);
 
 void pe_show_type(pe_t *pe);

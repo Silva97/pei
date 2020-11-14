@@ -1,11 +1,6 @@
 #include <stdbool.h>
 #include "pereader.h"
 
-void pe_seek(pe_t *pe, long int offset)
-{
-  fseek(pe->file, offset, SEEK_SET);
-}
-
 int pe_search_address_section(pe_t *pe, uint32_t address)
 {
   for (int i = 0; i < pe->coff_header->number_of_sections; i++)

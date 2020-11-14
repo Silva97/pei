@@ -6,7 +6,7 @@ FILE *pe_open(char *filename)
   char signature[PE_SIGNATURE_SIZE];
   int32_t signature_address;
 
-  FILE *executable = fopen(filename, "rb");
+  FILE *executable = fopen(filename, "r+b");
 
   fseek(executable, PE_SIGNATURE_ADDRESS_OFFSET, SEEK_SET);
   fread(&signature_address, sizeof signature_address, 1, executable);
