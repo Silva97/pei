@@ -85,7 +85,7 @@ int main(int argc, char **argv)
   case 's':
     validate_operation(operation, "show");
     char *info = (pos_argc < 3)
-                     ? "all"
+                     ? "g"
                      : argv[optind + 2];
 
     op_show(pe, info, section_number, verbose);
@@ -156,11 +156,11 @@ void show_help()
 
        "OPERATIONS\n"
        "  s,show            Show informations about the executable. Argument specify\n"
-       "                    what information to display. (all by default)\n"
+       "                    what information to display.\n"
        "                    Possible values to argument:\n"
        "                      all   Show all informations about the executable.\n"
        "                      dump  Dump the content of the section.\n"
-       "                      g     General informations about the executable.\n"
+       "                      g     General informations about the executable. (default)\n"
        "                      c     Show coff header.\n"
        "                      o     Show optional header.\n"
        "                      s     Show the specified section or all sections.\n"
