@@ -31,6 +31,7 @@
         putchar('|');                           \
       }                                         \
       fputs(#flag, stdout);                     \
+      show_separator = true;                    \
     }                                           \
   }
 
@@ -180,21 +181,22 @@ void pe_show_coff_characteristics(pe_t *pe, bool verbose)
   }
 
   PRINT_FIELD_N(pe->coff_header, "x", characteristics);
+  bool separator = false;
   fputs(" (", stdout);
-  PRINT_FLAG(pe->coff_header->characteristics, RELOCS_STRIPPED, false);
-  PRINT_FLAG(pe->coff_header->characteristics, EXECUTABLE_IMAGE, true);
-  PRINT_FLAG(pe->coff_header->characteristics, LINE_NUMS_STRIPPED, true);
-  PRINT_FLAG(pe->coff_header->characteristics, LOCAL_SYMS_STRIPPED, true);
-  PRINT_FLAG(pe->coff_header->characteristics, AGGRESSIVE_WS_TRIM, true);
-  PRINT_FLAG(pe->coff_header->characteristics, LARGE_ADDRESS_AWARE, true);
-  PRINT_FLAG(pe->coff_header->characteristics, BYTES_REVERSED_LO, true);
-  PRINT_FLAG(pe->coff_header->characteristics, BIT32_MACHINE, true);
-  PRINT_FLAG(pe->coff_header->characteristics, DEBUG_STRIPPED, true);
-  PRINT_FLAG(pe->coff_header->characteristics, REMOVABLE_RUN_FROM_SWAP, true);
-  PRINT_FLAG(pe->coff_header->characteristics, NET_RUN_FROM_SWAP, true);
-  PRINT_FLAG(pe->coff_header->characteristics, SYSTEM, true);
-  PRINT_FLAG(pe->coff_header->characteristics, UP_SYSTEM_ONLY, true);
-  PRINT_FLAG(pe->coff_header->characteristics, BYTES_REVERSED_HI, true);
+  PRINT_FLAG(pe->coff_header->characteristics, RELOCS_STRIPPED, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, EXECUTABLE_IMAGE, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, LINE_NUMS_STRIPPED, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, LOCAL_SYMS_STRIPPED, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, AGGRESSIVE_WS_TRIM, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, LARGE_ADDRESS_AWARE, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, BYTES_REVERSED_LO, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, BIT32_MACHINE, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, DEBUG_STRIPPED, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, REMOVABLE_RUN_FROM_SWAP, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, NET_RUN_FROM_SWAP, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, SYSTEM, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, UP_SYSTEM_ONLY, separator);
+  PRINT_FLAG(pe->coff_header->characteristics, BYTES_REVERSED_HI, separator);
   fputs(")\n", stdout);
 }
 
