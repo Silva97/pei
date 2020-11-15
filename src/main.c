@@ -90,6 +90,20 @@ int main(int argc, char **argv)
 
     op_show(pe, info, section_number, verbose);
     break;
+  case 'g':
+    validate_operation(operation, "get");
+    if (pos_argc < 4)
+    {
+      show_error("%s",
+                 "Expected <field> and <format> arguments.\n"
+                 "Example: pei g test.exe optional.entry_point '0x%%x'\n"
+                 "See help: pei -h");
+    }
+
+    char *field = argv[optind + 2];
+    const char *format = argv[optind + 3];
+    op_get(pe, field, format, section_number);
+    break;
   case 'z':
     validate_operation(operation, "zeros");
     op_zeros(pe, section_number);
@@ -166,6 +180,17 @@ void show_help()
        "                      s     Show the specified section or all sections.\n"
        "                    Combine characters to show the informations of your choice.\n"
        "                    Example: pei show test.exe gc\n"
+       "  g,get             Gets the value of a specific field on a specific structure,\n"
+       "                    and print the value on printf like format string.\n"
+       "                    The argument follow the format: structure.field\n"
+       "                    Possible values to structure:\n"
+       "                      coff       Get field from COFF Header.\n"
+       "                      optional   Get field from Optional Header.\n"
+       "                      section    Get field from Section Header.\n"
+       "                    The instruction given an extra argument to specify the\n"
+       "                    format to print the field. Examples:"
+       "                      pei g test.exe section.1.name '%s'\n"
+       "                      pei g test.exe optional.entry_point '0x%x'\n"
        "  z,zeros           Finds biggest zeroed block on sections of the executable.\n"
        "  i,inject          Injects code into the section or, if not specified, in the\n"
        "                    biggest zeroed block between all sections.\n"

@@ -17,6 +17,13 @@ pe_t *pe_parse(FILE *executable);
 void pe_write_header(pe_t *pe);
 void pe_seek(pe_t *pe, long int offset);
 
+bool pe_get_field(pe_t *pe, char *buff, char *field_string, const char *format);
+bool pe_get_coff_field(pe_t *pe, char *buff, char *field, const char *format);
+bool pe_get_optional_field(pe_t *pe, char *buff, char *field, const char *format);
+bool pe32_get_optional_field(pe_t *pe, char *buff, char *field, const char *format);
+bool pe64_get_optional_field(pe_t *pe, char *buff, char *field, const char *format);
+bool pe_get_section_field(pe_t *pe, char *buff, unsigned int section, char *field, const char *format);
+
 void pe_dump(pe_t *pe, uint32_t offset, uint32_t size);
 void pe_show_type(pe_t *pe);
 void pe_show_info(pe_t *pe);
