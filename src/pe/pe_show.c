@@ -211,6 +211,43 @@ void pe_show_coff(pe_t *pe, bool verbose)
   pe_show_coff_characteristics(pe, verbose);
 }
 
+void pe_show_dll_characteristics(pe_t *pe, bool verbose)
+{
+  uint16_t dll_characteristics;
+  if (pe->type == MAGIC_32BIT)
+  {
+    pe32_optional_header_t *optional_header = pe->optional_header;
+    dll_characteristics = optional_header->dll_characteristics;
+  }
+  else
+  {
+    pe64_optional_header_t *optional_header = pe->optional_header;
+    dll_characteristics = optional_header->dll_characteristics;
+  }
+
+  if (!verbose)
+  {
+    PRINT_ALIGNED("dll_characteristics", "%04" PRIx16, dll_characteristics);
+    return;
+  }
+
+  PRINT_ALIGNED_N("dll_characteristics", "%04" PRIx16, dll_characteristics);
+  bool separator = false;
+  fputs(" (", stdout);
+  PRINT_FLAG(dll_characteristics, HIGH_ENTROPY_VA, separator);
+  PRINT_FLAG(dll_characteristics, DYNAMIC_BASE, separator);
+  PRINT_FLAG(dll_characteristics, FORCE_INTEGRITY, separator);
+  PRINT_FLAG(dll_characteristics, NX_COMPAT, separator);
+  PRINT_FLAG(dll_characteristics, NO_ISOLATION, separator);
+  PRINT_FLAG(dll_characteristics, NO_SEH, separator);
+  PRINT_FLAG(dll_characteristics, NO_BIND, separator);
+  PRINT_FLAG(dll_characteristics, APPCONTAINER, separator);
+  PRINT_FLAG(dll_characteristics, WDM_DRIVER, separator);
+  PRINT_FLAG(dll_characteristics, GUARD_CF, separator);
+  PRINT_FLAG(dll_characteristics, TERMINAL_SERVER_AWARE, separator);
+  puts(")");
+}
+
 void pe32_show_optional_header(pe_t *pe, bool verbose)
 {
   pe32_optional_header_t *optional_header = pe->optional_header;
@@ -240,7 +277,7 @@ void pe32_show_optional_header(pe_t *pe, bool verbose)
   PRINT_FIELD(optional_header, PRIx32, size_of_headers);
   PRINT_FIELD(optional_header, PRIx32, checksum);
   pe_show_subsystem(pe, verbose);
-  PRINT_FIELD(optional_header, PRIx16, dll_characteristics);
+  pe_show_dll_characteristics(pe, verbose);
   PRINT_FIELD(optional_header, PRIx32, size_of_stack_reserve);
   PRINT_FIELD(optional_header, PRIx32, size_of_stack_commit);
   PRINT_FIELD(optional_header, PRIx32, size_of_head_reserve);
@@ -276,7 +313,7 @@ void pe64_show_optional_header(pe_t *pe, bool verbose)
   PRINT_FIELD(optional_header, PRIx32, size_of_headers);
   PRINT_FIELD(optional_header, PRIx32, checksum);
   pe_show_subsystem(pe, verbose);
-  PRINT_FIELD(optional_header, PRIx16, dll_characteristics);
+  pe_show_dll_characteristics(pe, verbose);
   PRINT_FIELD(optional_header, PRIx64, size_of_stack_reserve);
   PRINT_FIELD(optional_header, PRIx64, size_of_stack_commit);
   PRINT_FIELD(optional_header, PRIx64, size_of_head_reserve);

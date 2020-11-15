@@ -31,6 +31,7 @@ void pe_show_subsystem(pe_t *pe, bool verbose);
 void pe_show_coff_machine(pe_t *pe, bool verbose);
 void pe_show_coff_characteristics(pe_t *pe, bool verbose);
 void pe_show_coff(pe_t *pe, bool verbose);
+void pe_show_dll_characteristics(pe_t *pe, bool verbose);
 void pe32_show_optional_header(pe_t *pe, bool verbose);
 void pe64_show_optional_header(pe_t *pe, bool verbose);
 void pe_show_optional_header(pe_t *pe, bool verbose);
