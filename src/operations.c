@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <inttypes.h>
 #include "operations.h"
 #include "pereader.h"
@@ -112,4 +113,28 @@ void op_inject(pe_t *pe, char *filename, int section)
          block.offset,
          block.section,
          pe->section_header[block.section]->name);
+}
+
+void op_flags(pe_t *pe, char *flags, int section)
+{
+  if (section >= 0)
+  {
+    pe_section_header_t *header = pe->section_header[section];
+    FLAG_SET(header->characteristics, MEM_READ, strchr(flags, 'r'));
+    FLAG_SET(header->characteristics, MEM_WRITE, strchr(flags, 'w'));
+    FLAG_SET(header->characteristics, MEM_EXECUTE, strchr(flags, 'x'));
+    goto end;
+  }
+
+  for (int i = 0; i < pe->coff_header->number_of_sections; i++)
+  {
+    pe_section_header_t *header = pe->section_header[i];
+    FLAG_SET(header->characteristics, MEM_READ, strchr(flags, 'r'));
+    FLAG_SET(header->characteristics, MEM_WRITE, strchr(flags, 'w'));
+    FLAG_SET(header->characteristics, MEM_EXECUTE, strchr(flags, 'x'));
+  }
+
+end:
+  pe_write_header(pe);
+  return;
 }

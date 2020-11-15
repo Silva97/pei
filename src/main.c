@@ -63,9 +63,10 @@ int main(int argc, char **argv)
   }
 
   // Check positional arguments <operation> and <executable>
-  if (optind > argc - 2)
+  int pos_argc = argc - optind;
+  if (pos_argc < 2)
   {
-    show_error("More %d positional arguments is required.\nSee help: pei -h", optind - argc + 2);
+    show_error("More %d positional arguments is required.\nSee help: pei -h", 2 - pos_argc);
   }
 
   char *operation = argv[optind];
@@ -88,6 +89,18 @@ int main(int argc, char **argv)
   case 'i':
     validate_operation(operation, "inject");
     op_inject(pe, code_file, section_number);
+    break;
+  case 'f':
+    validate_operation(operation, "flags");
+    if (pos_argc < 3)
+    {
+      show_error("%s\n%s",
+                 "Expected <flags> argument. Example: pei flags test.exe rwx",
+                 "See help: pei -h");
+    }
+
+    char *flags = argv[optind + 2];
+    op_flags(pe, flags, section_number);
     break;
   default:
     show_error("'%s' is an invalid operation.", operation);
@@ -119,9 +132,10 @@ void show_help()
        "PE executables.\n\n"
 
        "USAGE\n"
-       "  pei [options] <operation> <executable>\n"
+       "  pei [options] <operation> <executable> [argument]\n"
        "    operation     Operation to do with the executable.\n"
-       "    executable    PE32 or PE32+ executable file.\n\n"
+       "    executable    PE32 or PE32+ executable file.\n"
+       "    argument      Argument necessary on some operations.\n\n"
 
        "OPTIONS\n"
        "  -h,--help       Show this help message.\n"
@@ -136,5 +150,9 @@ void show_help()
        "  z,zeros           Finds biggest zeroed block on sections of the executable.\n"
        "  i,inject          Injects code into the section or, if not specified, in the\n"
        "                    biggest zeroed block between all sections.\n"
-       "                    When inject code, the section is marked as executable.\n");
+       "                    When inject code, the section is marked as executable.\n"
+       "  f,flags           Update the section flags. Argument is a list os characters\n"
+       "                    specifying the flags to make enabled. Any flag who is not on\n"
+       "                    the list will be disabled. Example: `pei f test.exe rx`\n"
+       "                      r - read | w - write | x - execute\n");
 }
