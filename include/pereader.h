@@ -39,6 +39,7 @@ void pe_show_section_header(pe_t *pe, unsigned int section_number, bool verbose)
 void pe_show_all_section_headers(pe_t *pe, bool verbose);
 
 uint32_t pe_update_entrypoint(pe_t *pe, uint32_t address);
+void pe_disable_aslr(pe_t *pe);
 int64_t pe_offset_to_vaddress(pe_t *pe, uint32_t offset);
 uint64_t pe_image_base(pe_t *pe);
 

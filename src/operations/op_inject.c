@@ -65,6 +65,7 @@ void op_inject(pe_t *pe, char *filename, int section)
 
   // Make section executable
   pe->section_header[block.section]->characteristics |= MEM_EXECUTE;
+  pe_disable_aslr(pe);
 
   fwrite(code, sizeof(code), 1, pe->file);
   pe_write_header(pe);
