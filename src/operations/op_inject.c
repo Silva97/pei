@@ -41,6 +41,7 @@ void op_inject(pe_t *pe, char *filename, int section)
             fsize,
             sizeof(code),
             block.size);
+    exit(EXIT_FAILURE);
   }
 
   fseek(file, 0, SEEK_SET);
