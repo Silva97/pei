@@ -17,11 +17,16 @@ pe_t *pe_parse(FILE *executable);
 void pe_write_header(pe_t *pe);
 void pe_seek(pe_t *pe, long int offset);
 
+void pe_dump(pe_t *pe, uint32_t offset, uint32_t size);
 void pe_show_type(pe_t *pe);
+void pe_show_info(pe_t *pe);
+void pe_show_subsystem(pe_t *pe, bool verbose);
+void pe_show_coff_machine(pe_t *pe, bool verbose);
 void pe_show_coff_characteristics(pe_t *pe, bool verbose);
 void pe_show_coff(pe_t *pe, bool verbose);
-void pe32_show_optional_header(pe_t *pe);
-void pe64_show_optional_header(pe_t *pe);
+void pe32_show_optional_header(pe_t *pe, bool verbose);
+void pe64_show_optional_header(pe_t *pe, bool verbose);
+void pe_show_optional_header(pe_t *pe, bool verbose);
 void pe_show_section_header(pe_t *pe, unsigned int section_number);
 void pe_show_all_section_headers(pe_t *pe);
 

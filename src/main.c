@@ -82,6 +82,14 @@ int main(int argc, char **argv)
   // Operations
   switch (operation[0])
   {
+  case 's':
+    validate_operation(operation, "show");
+    char *info = (pos_argc < 3)
+                     ? "all"
+                     : argv[optind + 2];
+
+    op_show(pe, info, section_number, verbose);
+    break;
   case 'z':
     validate_operation(operation, "zeros");
     op_zeros(pe, section_number);
@@ -147,11 +155,22 @@ void show_help()
        "                  by default all sections will be affected by operation.\n\n"
 
        "OPERATIONS\n"
+       "  s,show            Show informations about the executable. Argument specify\n"
+       "                    what information to display. (all by default)\n"
+       "                    Possible values to argument:\n"
+       "                      all   Show all informations about the executable.\n"
+       "                      dump  Dump the content of the section.\n"
+       "                      g     General informations about the executable.\n"
+       "                      c     Show coff header.\n"
+       "                      o     Show optional header.\n"
+       "                      s     Show the specified section or all sections.\n"
+       "                    Combine characters to show the informations of your choice.\n"
+       "                    Example: pei show test.exe gc\n"
        "  z,zeros           Finds biggest zeroed block on sections of the executable.\n"
        "  i,inject          Injects code into the section or, if not specified, in the\n"
        "                    biggest zeroed block between all sections.\n"
        "                    When inject code, the section is marked as executable.\n"
-       "  f,flags           Update the section flags. Argument is a list os characters\n"
+       "  f,flags           Update the section flags. Argument is a list of characters\n"
        "                    specifying the flags to make enabled. Any flag who is not on\n"
        "                    the list will be disabled. Example: `pei f test.exe rx`\n"
        "                      r - read | w - write | x - execute\n");

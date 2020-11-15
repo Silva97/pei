@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include "pereader.h"
+#include "choice.h"
 
 #define PALIGN "%-32s"
 
@@ -15,8 +16,11 @@
 #define PRINT_FIELD(structure, mask, field_name) \
   PRINT_FIELD_N(structure, mask "\n", field_name)
 
+#define PRINT_ALIGNED_N(text, mask, ...) \
+  printf(PALIGN mask, text, __VA_ARGS__)
+
 #define PRINT_ALIGNED(text, mask, ...) \
-  printf(PALIGN mask "\n", text, __VA_ARGS__)
+  PRINT_ALIGNED_N(text, mask "\n", __VA_ARGS__)
 
 #define PRINT_FLAG(value, flag, show_separator) \
   {                                             \
@@ -30,15 +34,42 @@
     }                                           \
   }
 
+void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
+{
+  pe_seek(pe, offset);
+
+  for (int i = 0; i < size; i++)
+  {
+    unsigned int c = fgetc(pe->file);
+
+    if (i % 16 == 0)
+    {
+      if (i)
+      {
+        putchar('\n');
+      }
+      printf("%08x  ", offset + i);
+    }
+    else if (i % 8 == 0)
+    {
+      fputs("  ", stdout);
+    }
+
+    printf("%02x ", c);
+  }
+
+  putchar('\n');
+}
+
 void pe_show_type(pe_t *pe)
 {
   switch (pe->type)
   {
   case MAGIC_32BIT:
-    PRINT_ALIGNED("type", "%s", "32-bit");
+    PRINT_ALIGNED("type", "%s", "PE32");
     break;
   case MAGIC_64BIT:
-    PRINT_ALIGNED("type", "%s", "64-bit");
+    PRINT_ALIGNED("type", "%s", "PE32+");
     break;
   case MAGIC_ROM:
     PRINT_ALIGNED("type", "%s", "ROM");
@@ -47,6 +78,97 @@ void pe_show_type(pe_t *pe)
     PRINT_ALIGNED("type", "%s", "*unknown*");
     break;
   }
+}
+
+void pe_show_info(pe_t *pe)
+{
+  pe_show_type(pe);
+  pe_show_coff_machine(pe, true);
+  pe_show_subsystem(pe, true);
+
+  fseek(pe->file, 0, SEEK_END);
+  size_t size = ftell(pe->file);
+  PRINT_ALIGNED("size", "%zu KiB", size / 1024);
+}
+
+void pe_show_subsystem(pe_t *pe, bool verbose)
+{
+  uint16_t subsystem;
+  if (pe->type == MAGIC_32BIT)
+  {
+    pe32_optional_header_t *optional_header = pe->optional_header;
+    subsystem = optional_header->subsystem;
+  }
+  else
+  {
+    pe64_optional_header_t *optional_header = pe->optional_header;
+    subsystem = optional_header->subsystem;
+  }
+
+  PRINT_ALIGNED_N("subsystem", "%04" PRIx16, subsystem);
+  if (!verbose)
+  {
+    putchar('\n');
+    return;
+  }
+
+  char *text = choose(subsystem,
+                      CHOICE(SUBSYSTEM_UNKNOWN),
+                      CHOICE(NATIVE),
+                      CHOICE(WINDOWS_GUI),
+                      CHOICE(WINDOWS_CUI),
+                      CHOICE(OS2_CUI),
+                      CHOICE(POSIX_CUI),
+                      CHOICE(NATIVE_WINDOWS),
+                      CHOICE(WINDOWS_CE_GUI),
+                      CHOICE(EFI_APPLICATION),
+                      CHOICE(EFI_BOOT_SERVICE_DRIVER),
+                      CHOICE(EFI_RUNTIME_DRIVER),
+                      CHOICE(EFI_ROM),
+                      CHOICE(XBOX),
+                      FINAL(WINDOWS_BOOT_APPLICATION));
+  printf(" (%s)\n", text);
+}
+
+void pe_show_coff_machine(pe_t *pe, bool verbose)
+{
+  if (!verbose)
+  {
+    PRINT_FIELD(pe->coff_header, PRIx16, machine);
+    return;
+  }
+
+  uint16_t machine = pe->coff_header->machine;
+  char *text = choose(machine,
+                      CHOICE(MACHINE_UNKNOWN),
+                      CHOICE(AM33),
+                      CHOICE(AMD64),
+                      CHOICE(ARM),
+                      CHOICE(ARM64),
+                      CHOICE(ARMNT),
+                      CHOICE(EBC),
+                      CHOICE(I386),
+                      CHOICE(IA64),
+                      CHOICE(M32R),
+                      CHOICE(MIPS16),
+                      CHOICE(MIPSFPU),
+                      CHOICE(MIPSFPU16),
+                      CHOICE(POWERPC),
+                      CHOICE(POWERPCFP),
+                      CHOICE(R4000),
+                      CHOICE(RISCV32),
+                      CHOICE(RISCV64),
+                      CHOICE(RISCV128),
+                      CHOICE(SH3),
+                      CHOICE(SH3DSP),
+                      CHOICE(SH4),
+                      CHOICE(SH5),
+                      CHOICE(THUMB),
+                      FINAL(WCEMIPSV2));
+
+  PRINT_ALIGNED("machine", "%" PRIx16 " (%s)",
+                machine,
+                text);
 }
 
 void pe_show_coff_characteristics(pe_t *pe, bool verbose)
@@ -78,6 +200,7 @@ void pe_show_coff_characteristics(pe_t *pe, bool verbose)
 
 void pe_show_coff(pe_t *pe, bool verbose)
 {
+  pe_show_coff_machine(pe, verbose);
   PRINT_FIELD(pe->coff_header, "x", number_of_sections);
   PRINT_FIELD(pe->coff_header, "x", time_date_stamp);
   PRINT_FIELD(pe->coff_header, "x", pointer_to_symbol_table);
@@ -86,7 +209,7 @@ void pe_show_coff(pe_t *pe, bool verbose)
   pe_show_coff_characteristics(pe, verbose);
 }
 
-void pe32_show_optional_header(pe_t *pe)
+void pe32_show_optional_header(pe_t *pe, bool verbose)
 {
   pe32_optional_header_t *optional_header = pe->optional_header;
 
@@ -112,7 +235,7 @@ void pe32_show_optional_header(pe_t *pe)
   PRINT_FIELD(optional_header, PRIx32, size_of_image);
   PRINT_FIELD(optional_header, PRIx32, size_of_headers);
   PRINT_FIELD(optional_header, PRIx32, checksum);
-  PRINT_FIELD(optional_header, PRIx16, subsystem);
+  pe_show_subsystem(pe, verbose);
   PRINT_FIELD(optional_header, PRIx16, dll_characteristics);
   PRINT_FIELD(optional_header, PRIx32, size_of_stack_reserve);
   PRINT_FIELD(optional_header, PRIx32, size_of_stack_commit);
@@ -122,7 +245,7 @@ void pe32_show_optional_header(pe_t *pe)
   PRINT_FIELD(optional_header, PRIx32, number_of_rva_and_sizes);
 }
 
-void pe64_show_optional_header(pe_t *pe)
+void pe64_show_optional_header(pe_t *pe, bool verbose)
 {
   pe64_optional_header_t *optional_header = pe->optional_header;
 
@@ -148,7 +271,7 @@ void pe64_show_optional_header(pe_t *pe)
   PRINT_FIELD(optional_header, PRIx32, size_of_image);
   PRINT_FIELD(optional_header, PRIx32, size_of_headers);
   PRINT_FIELD(optional_header, PRIx32, checksum);
-  PRINT_FIELD(optional_header, PRIx16, subsystem);
+  pe_show_subsystem(pe, verbose);
   PRINT_FIELD(optional_header, PRIx16, dll_characteristics);
   PRINT_FIELD(optional_header, PRIx64, size_of_stack_reserve);
   PRINT_FIELD(optional_header, PRIx64, size_of_stack_commit);
@@ -156,6 +279,18 @@ void pe64_show_optional_header(pe_t *pe)
   PRINT_FIELD(optional_header, PRIx64, size_of_head_commit);
   PRINT_FIELD(optional_header, PRIx32, loader_flags);
   PRINT_FIELD(optional_header, PRIx32, number_of_rva_and_sizes);
+}
+
+void pe_show_optional_header(pe_t *pe, bool verbose)
+{
+  if (pe->type == MAGIC_32BIT)
+  {
+    pe32_show_optional_header(pe, verbose);
+  }
+  else
+  {
+    pe64_show_optional_header(pe, verbose);
+  }
 }
 
 void pe_show_section_header(pe_t *pe, unsigned int section_number)
