@@ -179,12 +179,12 @@ void op_show(pe_t *pe, char *info, int section, bool verbose)
   {
     if (section < 0)
     {
-      pe_show_all_section_headers(pe);
+      pe_show_all_section_headers(pe, verbose);
     }
     else
     {
       printf("--- Section #%d ---\n", section);
-      pe_show_section_header(pe, section);
+      pe_show_section_header(pe, section, verbose);
     }
   }
 }

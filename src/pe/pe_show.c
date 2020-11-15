@@ -295,7 +295,58 @@ void pe_show_optional_header(pe_t *pe, bool verbose)
   }
 }
 
-void pe_show_section_header(pe_t *pe, unsigned int section_number)
+void pe_show_section_characteristics(pe_t *pe, unsigned int section_number, bool verbose)
+{
+  if (!verbose)
+  {
+    PRINT_FIELD(pe->section_header[section_number], PRIx32, characteristics);
+    return;
+  }
+
+  PRINT_FIELD_N(pe->section_header[section_number], PRIx32, characteristics);
+
+  uint32_t characteristics = pe->section_header[section_number]->characteristics;
+  bool separator = false;
+  fputs(" (", stdout);
+  PRINT_FLAG(characteristics, TYPE_NO_PAD, separator);
+  PRINT_FLAG(characteristics, CNT_CODE, separator);
+  PRINT_FLAG(characteristics, CNT_INITIALIZED_DATA, separator);
+  PRINT_FLAG(characteristics, CNT_UNINITIALIZED_DATA, separator);
+  PRINT_FLAG(characteristics, LNK_OTHER, separator);
+  PRINT_FLAG(characteristics, LNK_INFO, separator);
+  PRINT_FLAG(characteristics, LNK_REMOVE, separator);
+  PRINT_FLAG(characteristics, LNK_COMDAT, separator);
+  PRINT_FLAG(characteristics, GPREL, separator);
+  PRINT_FLAG(characteristics, MEM_PURGEABLE, separator);
+  PRINT_FLAG(characteristics, MEM_16BIT, separator);
+  PRINT_FLAG(characteristics, MEM_LOCKED, separator);
+  PRINT_FLAG(characteristics, MEM_PRELOAD, separator);
+  PRINT_FLAG(characteristics, ALIGN_1BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_2BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_4BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_8BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_16BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_32BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_64BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_128BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_256BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_512BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_1024BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_2048BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_4096BYTES, separator);
+  PRINT_FLAG(characteristics, ALIGN_8192BYTES, separator);
+  PRINT_FLAG(characteristics, LNK_NRELOC_OVFL, separator);
+  PRINT_FLAG(characteristics, MEM_DISCARDABLE, separator);
+  PRINT_FLAG(characteristics, MEM_NOT_CACHED, separator);
+  PRINT_FLAG(characteristics, MEM_NOT_PAGED, separator);
+  PRINT_FLAG(characteristics, MEM_SHARED, separator);
+  PRINT_FLAG(characteristics, MEM_EXECUTE, separator);
+  PRINT_FLAG(characteristics, MEM_READ, separator);
+  PRINT_FLAG(characteristics, MEM_WRITE, separator);
+  fputs(")\n", stdout);
+}
+
+void pe_show_section_header(pe_t *pe, unsigned int section_number, bool verbose)
 {
   PRINT_ALIGNED("name", "%-8s", pe->section_header[section_number]->name);
   PRINT_FIELD(pe->section_header[section_number], PRIx32, virtual_size);
@@ -306,14 +357,14 @@ void pe_show_section_header(pe_t *pe, unsigned int section_number)
   PRINT_FIELD(pe->section_header[section_number], PRIx32, pointer_to_line_numbers);
   PRINT_FIELD(pe->section_header[section_number], PRIx16, number_of_relocations);
   PRINT_FIELD(pe->section_header[section_number], PRIx16, number_of_line_numbers);
-  PRINT_FIELD(pe->section_header[section_number], PRIx32, characteristics);
+  pe_show_section_characteristics(pe, section_number, verbose);
 }
 
-void pe_show_all_section_headers(pe_t *pe)
+void pe_show_all_section_headers(pe_t *pe, bool verbose)
 {
   for (int i = 0; i < pe->coff_header->number_of_sections; i++)
   {
     printf("\n--- Section #%d ---\n", i);
-    pe_show_section_header(pe, i);
+    pe_show_section_header(pe, i, verbose);
   }
 }

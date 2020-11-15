@@ -27,8 +27,9 @@ void pe_show_coff(pe_t *pe, bool verbose);
 void pe32_show_optional_header(pe_t *pe, bool verbose);
 void pe64_show_optional_header(pe_t *pe, bool verbose);
 void pe_show_optional_header(pe_t *pe, bool verbose);
-void pe_show_section_header(pe_t *pe, unsigned int section_number);
-void pe_show_all_section_headers(pe_t *pe);
+void pe_show_section_characteristics(pe_t *pe, unsigned int section_number, bool verbose);
+void pe_show_section_header(pe_t *pe, unsigned int section_number, bool verbose);
+void pe_show_all_section_headers(pe_t *pe, bool verbose);
 
 uint32_t pe_update_entrypoint(pe_t *pe, uint32_t address);
 int64_t pe_offset_to_vaddress(pe_t *pe, uint32_t offset);
