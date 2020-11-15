@@ -99,7 +99,7 @@ void op_inject(pe_t *pe, char *filename, int section)
   // Update the entry point and save the Original Entry Point
   // to add a jump to it.
   uint32_t oep = pe_update_entrypoint(pe, vaddress);
-  *((uint32_t *)&code[1]) = oep;
+  *((uint32_t *)&code[1]) = pe_image_base(pe) + oep;
 
   // Make section executable
   pe->section_header[block.section]->characteristics |= MEM_EXECUTE;

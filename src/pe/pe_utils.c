@@ -38,6 +38,24 @@ int64_t pe_offset_to_vaddress(pe_t *pe, uint32_t offset)
   return -1;
 }
 
+uint64_t pe_image_base(pe_t *pe)
+{
+  uint64_t image_base;
+
+  if (pe->type == MAGIC_32BIT)
+  {
+    pe32_optional_header_t *optional_header = pe->optional_header;
+    image_base = optional_header->image_base;
+  }
+  else
+  {
+    pe64_optional_header_t *optional_header = pe->optional_header;
+    image_base = optional_header->image_base;
+  }
+
+  return image_base;
+}
+
 int pe_search_address_section(pe_t *pe, uint32_t address)
 {
   for (int i = 0; i < pe->coff_header->number_of_sections; i++)
