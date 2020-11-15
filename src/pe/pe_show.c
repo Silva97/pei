@@ -224,6 +224,8 @@ void pe32_show_optional_header(pe_t *pe, bool verbose)
   PRINT_FIELD(optional_header, "x", entry_point);
   PRINT_FIELD(optional_header, "x", base_of_code);
 
+  PRINT_FIELD(optional_header, "x", base_of_data);
+
   PRINT_FIELD(optional_header, PRIx32, image_base);
   PRINT_FIELD(optional_header, PRIx32, section_alignment);
   PRINT_FIELD(optional_header, PRIx32, file_alignment);
