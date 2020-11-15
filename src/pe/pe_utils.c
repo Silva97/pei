@@ -1,6 +1,43 @@
 #include <stdbool.h>
 #include "pereader.h"
 
+uint32_t pe_update_entrypoint(pe_t *pe, uint32_t address)
+{
+  uint32_t oep;
+
+  if (pe->type == MAGIC_32BIT)
+  {
+    pe32_optional_header_t *optional_header = pe->optional_header;
+    oep = optional_header->entry_point;
+    optional_header->entry_point = address;
+  }
+  else
+  {
+    pe64_optional_header_t *optional_header = pe->optional_header;
+    oep = optional_header->entry_point;
+    optional_header->entry_point = address;
+  }
+
+  return oep;
+}
+
+int64_t pe_offset_to_vaddress(pe_t *pe, uint32_t offset)
+{
+  // Find offset on the sections
+  for (int i = 0; i < pe->coff_header->number_of_sections; i++)
+  {
+    pe_section_header_t *section = pe->section_header[i];
+    if (offset >= section->pointer_to_raw_data &&
+        offset <= section->pointer_to_raw_data + section->size_of_raw_data)
+    {
+      uint32_t rel_offset = offset - section->pointer_to_raw_data;
+      return section->virtual_address + rel_offset;
+    }
+  }
+
+  return -1;
+}
+
 int pe_search_address_section(pe_t *pe, uint32_t address)
 {
   for (int i = 0; i < pe->coff_header->number_of_sections; i++)

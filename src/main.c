@@ -18,26 +18,43 @@ void show_help();
 int main(int argc, char **argv)
 {
   int section_number = -1;
+  int verbose = false;
+  char *code_file = NULL;
+
   struct option options[] = {
       {"help", no_argument, NULL, 'h'},
+      {"file", required_argument, NULL, 'f'},
       {"section", required_argument, NULL, 's'},
+      {"verbose", no_argument, &verbose, true},
+      {"version", no_argument, NULL, 'V'},
       {0, 0, 0, 0},
   };
 
   int c;
   int option_index;
-  while ((c = getopt_long(argc, argv, "hs:", options, &option_index)) >= 0)
+  while ((c = getopt_long(argc, argv, "hf:s:vV", options, &option_index)) >= 0)
   {
     switch (c)
     {
+    case 0:
+      break;
+    case 'h':
+      show_help();
+      exit(EXIT_SUCCESS);
+    case 'f':
+      code_file = optarg;
+      break;
     case 's':
       if (sscanf(optarg, "%d", &section_number) != 1)
       {
         show_error("'%s' is an invalid section number.", optarg);
       }
       break;
-    case 'h':
-      show_help();
+    case 'v':
+      verbose = true;
+      break;
+    case 'V':
+      show_version_info();
       exit(EXIT_SUCCESS);
     default:
       exit(EXIT_FAILURE);
@@ -68,6 +85,12 @@ int main(int argc, char **argv)
     validate_operation(operation, "zeros");
     op_zeros(pe, section_number);
     break;
+  case 'i':
+    validate_operation(operation, "inject");
+    op_inject(pe, code_file, section_number);
+    break;
+  default:
+    show_error("'%s' is an invalid operation.", operation);
   }
 
   return 0;
@@ -101,9 +124,10 @@ void show_help()
        "    executable    PE32 or PE32+ executable file.\n\n"
 
        "OPTIONS\n"
-       "  -h,--help       Show this help message\n"
-       "  -f,--file       Read the code from the binary file. If not specified, the\n"
-       "                  code will be read from stdin.\n"
+       "  -h,--help       Show this help message.\n"
+       "  -V,--version    Show version information.\n"
+       "  -v,--verbose    Verbose output.\n"
+       "  -f,--file       Read the code from the binary file.\n"
        "  -s,--section    Do operation only on the specific section. Section is the\n"
        "                  number of the section. If this options is not specified,\n"
        "                  by default all sections will be affected by operation.\n\n"

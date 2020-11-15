@@ -25,6 +25,9 @@ void pe64_show_optional_header(pe_t *pe);
 void pe_show_section_header(pe_t *pe, unsigned int section_number);
 void pe_show_all_section_headers(pe_t *pe);
 
+uint32_t pe_update_entrypoint(pe_t *pe, uint32_t address);
+int64_t pe_offset_to_vaddress(pe_t *pe, uint32_t offset);
+
 int pe_search_address_section(pe_t *pe, uint32_t address);
 int pe_search_entrypoint_section(pe_t *pe);
 pe_block_t pe_search_biggest_zero_sequence_on_section(pe_t *pe, unsigned int section);
