@@ -248,47 +248,87 @@ void pe_show_dll_characteristics(pe_t *pe, bool verbose)
   puts(")");
 }
 
-void pe32_show_optional_header(pe_t *pe, bool verbose)
+void pe32_show_optional_header(pe32_t *pe, bool verbose)
 {
-  pe32_optional_header_t *optional_header = pe->optional_header;
+  PRINT_FIELD(pe->optional_header, "x", magic);
+  PRINT_FIELD(pe->optional_header, "x", major_linker_version);
+  PRINT_FIELD(pe->optional_header, "x", minor_linker_version);
+  PRINT_FIELD(pe->optional_header, "x", size_of_code);
+  PRINT_FIELD(pe->optional_header, "x", size_of_initialized_data);
+  PRINT_FIELD(pe->optional_header, "x", size_of_unitialized_data);
+  PRINT_FIELD(pe->optional_header, "x", entry_point);
+  PRINT_FIELD(pe->optional_header, "x", base_of_code);
 
-  PRINT_FIELD(optional_header, "x", magic);
-  PRINT_FIELD(optional_header, "x", major_linker_version);
-  PRINT_FIELD(optional_header, "x", minor_linker_version);
-  PRINT_FIELD(optional_header, "x", size_of_code);
-  PRINT_FIELD(optional_header, "x", size_of_initialized_data);
-  PRINT_FIELD(optional_header, "x", size_of_unitialized_data);
-  PRINT_FIELD(optional_header, "x", entry_point);
-  PRINT_FIELD(optional_header, "x", base_of_code);
+  PRINT_FIELD(pe->optional_header, "x", base_of_data);
 
-  PRINT_FIELD(optional_header, "x", base_of_data);
-
-  PRINT_FIELD(optional_header, PRIx32, image_base);
-  PRINT_FIELD(optional_header, PRIx32, section_alignment);
-  PRINT_FIELD(optional_header, PRIx32, file_alignment);
-  PRINT_FIELD(optional_header, PRIx16, major_os_version);
-  PRINT_FIELD(optional_header, PRIx16, minor_os_version);
-  PRINT_FIELD(optional_header, PRIx16, major_image_version);
-  PRINT_FIELD(optional_header, PRIx16, minor_image_version);
-  PRINT_FIELD(optional_header, PRIx16, major_subsystem_version);
-  PRINT_FIELD(optional_header, PRIx16, minor_subsystem_version);
-  PRINT_FIELD(optional_header, PRIx32, win32_version_value);
-  PRINT_FIELD(optional_header, PRIx32, size_of_image);
-  PRINT_FIELD(optional_header, PRIx32, size_of_headers);
-  PRINT_FIELD(optional_header, PRIx32, checksum);
-  pe_show_subsystem(pe, verbose);
-  pe_show_dll_characteristics(pe, verbose);
-  PRINT_FIELD(optional_header, PRIx32, size_of_stack_reserve);
-  PRINT_FIELD(optional_header, PRIx32, size_of_stack_commit);
-  PRINT_FIELD(optional_header, PRIx32, size_of_head_reserve);
-  PRINT_FIELD(optional_header, PRIx32, size_of_head_commit);
-  PRINT_FIELD(optional_header, PRIx32, loader_flags);
-  PRINT_FIELD(optional_header, PRIx32, number_of_rva_and_sizes);
+  PRINT_FIELD(pe->optional_header, PRIx32, image_base);
+  PRINT_FIELD(pe->optional_header, PRIx32, section_alignment);
+  PRINT_FIELD(pe->optional_header, PRIx32, file_alignment);
+  PRINT_FIELD(pe->optional_header, PRIx16, major_os_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, minor_os_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, major_image_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, minor_image_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, major_subsystem_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, minor_subsystem_version);
+  PRINT_FIELD(pe->optional_header, PRIx32, win32_version_value);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_image);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_headers);
+  PRINT_FIELD(pe->optional_header, PRIx32, checksum);
+  pe_show_subsystem((pe_t *)pe, verbose);
+  pe_show_dll_characteristics((pe_t *)pe, verbose);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_stack_reserve);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_stack_commit);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_head_reserve);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_head_commit);
+  PRINT_FIELD(pe->optional_header, PRIx32, loader_flags);
+  PRINT_FIELD(pe->optional_header, PRIx32, number_of_rva_and_sizes);
 }
 
-void pe64_show_optional_header(pe_t *pe, bool verbose)
+void pe64_show_optional_header(pe64_t *pe, bool verbose)
 {
-  pe64_optional_header_t *optional_header = pe->optional_header;
+  PRINT_FIELD(pe->optional_header, "x", magic);
+  PRINT_FIELD(pe->optional_header, "x", major_linker_version);
+  PRINT_FIELD(pe->optional_header, "x", minor_linker_version);
+  PRINT_FIELD(pe->optional_header, "x", size_of_code);
+  PRINT_FIELD(pe->optional_header, "x", size_of_initialized_data);
+  PRINT_FIELD(pe->optional_header, "x", size_of_unitialized_data);
+  PRINT_FIELD(pe->optional_header, "x", entry_point);
+  PRINT_FIELD(pe->optional_header, "x", base_of_code);
+
+  PRINT_FIELD(pe->optional_header, PRIx64, image_base);
+  PRINT_FIELD(pe->optional_header, PRIx32, section_alignment);
+  PRINT_FIELD(pe->optional_header, PRIx32, file_alignment);
+  PRINT_FIELD(pe->optional_header, PRIx16, major_os_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, minor_os_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, major_image_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, minor_image_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, major_subsystem_version);
+  PRINT_FIELD(pe->optional_header, PRIx16, minor_subsystem_version);
+  PRINT_FIELD(pe->optional_header, PRIx32, win32_version_value);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_image);
+  PRINT_FIELD(pe->optional_header, PRIx32, size_of_headers);
+  PRINT_FIELD(pe->optional_header, PRIx32, checksum);
+  pe_show_subsystem((pe_t *)pe, verbose);
+  pe_show_dll_characteristics((pe_t *)pe, verbose);
+  PRINT_FIELD(pe->optional_header, PRIx64, size_of_stack_reserve);
+  PRINT_FIELD(pe->optional_header, PRIx64, size_of_stack_commit);
+  PRINT_FIELD(pe->optional_header, PRIx64, size_of_head_reserve);
+  PRINT_FIELD(pe->optional_header, PRIx64, size_of_head_commit);
+  PRINT_FIELD(pe->optional_header, PRIx32, loader_flags);
+  PRINT_FIELD(pe->optional_header, PRIx32, number_of_rva_and_sizes);
+}
+
+void pe_show_optional_header(pe_t *pe, bool verbose)
+{
+  if (pe->type == MAGIC_32BIT)
+  {
+    pe32_show_optional_header((pe32_t *)pe, verbose);
+  }
+  else
+  {
+    pe64_show_optional_header((pe64_t *)pe, verbose);
+  }
+}
 
   PRINT_FIELD(optional_header, "x", magic);
   PRINT_FIELD(optional_header, "x", major_linker_version);

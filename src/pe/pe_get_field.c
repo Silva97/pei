@@ -71,86 +71,82 @@ bool pe_get_optional_field(pe_t *pe, char *buff, char *field, const char *format
 {
   if (pe->type == MAGIC_32BIT)
   {
-    return pe32_get_optional_field(pe, buff, field, format);
+    return pe32_get_optional_field((pe32_t *)pe, buff, field, format);
   }
 
-  return pe64_get_optional_field(pe, buff, field, format);
+  return pe64_get_optional_field((pe64_t *)pe, buff, field, format);
 }
 
-bool pe32_get_optional_field(pe_t *pe, char *buff, char *field, const char *format)
+bool pe32_get_optional_field(pe32_t *pe, char *buff, char *field, const char *format)
 {
-  pe32_optional_header_t *optional_header = pe->optional_header;
+  GET_FIELD(pe->optional_header, field, magic);
+  GET_FIELD(pe->optional_header, field, major_linker_version);
+  GET_FIELD(pe->optional_header, field, minor_linker_version);
+  GET_FIELD(pe->optional_header, field, size_of_code);
+  GET_FIELD(pe->optional_header, field, size_of_initialized_data);
+  GET_FIELD(pe->optional_header, field, size_of_unitialized_data);
+  GET_FIELD(pe->optional_header, field, entry_point);
+  GET_FIELD(pe->optional_header, field, base_of_code);
 
-  GET_FIELD(optional_header, field, magic);
-  GET_FIELD(optional_header, field, major_linker_version);
-  GET_FIELD(optional_header, field, minor_linker_version);
-  GET_FIELD(optional_header, field, size_of_code);
-  GET_FIELD(optional_header, field, size_of_initialized_data);
-  GET_FIELD(optional_header, field, size_of_unitialized_data);
-  GET_FIELD(optional_header, field, entry_point);
-  GET_FIELD(optional_header, field, base_of_code);
+  GET_FIELD(pe->optional_header, field, base_of_data);
 
-  GET_FIELD(optional_header, field, base_of_data);
-
-  GET_FIELD(optional_header, field, image_base);
-  GET_FIELD(optional_header, field, section_alignment);
-  GET_FIELD(optional_header, field, file_alignment);
-  GET_FIELD(optional_header, field, major_os_version);
-  GET_FIELD(optional_header, field, minor_os_version);
-  GET_FIELD(optional_header, field, major_image_version);
-  GET_FIELD(optional_header, field, minor_image_version);
-  GET_FIELD(optional_header, field, major_subsystem_version);
-  GET_FIELD(optional_header, field, minor_subsystem_version);
-  GET_FIELD(optional_header, field, win32_version_value);
-  GET_FIELD(optional_header, field, size_of_image);
-  GET_FIELD(optional_header, field, size_of_headers);
-  GET_FIELD(optional_header, field, checksum);
-  GET_FIELD(optional_header, field, subsystem);
-  GET_FIELD(optional_header, field, dll_characteristics);
-  GET_FIELD(optional_header, field, size_of_stack_reserve);
-  GET_FIELD(optional_header, field, size_of_stack_commit);
-  GET_FIELD(optional_header, field, size_of_head_reserve);
-  GET_FIELD(optional_header, field, size_of_head_commit);
-  GET_FIELD(optional_header, field, loader_flags);
-  GET_FIELD(optional_header, field, number_of_rva_and_sizes);
+  GET_FIELD(pe->optional_header, field, image_base);
+  GET_FIELD(pe->optional_header, field, section_alignment);
+  GET_FIELD(pe->optional_header, field, file_alignment);
+  GET_FIELD(pe->optional_header, field, major_os_version);
+  GET_FIELD(pe->optional_header, field, minor_os_version);
+  GET_FIELD(pe->optional_header, field, major_image_version);
+  GET_FIELD(pe->optional_header, field, minor_image_version);
+  GET_FIELD(pe->optional_header, field, major_subsystem_version);
+  GET_FIELD(pe->optional_header, field, minor_subsystem_version);
+  GET_FIELD(pe->optional_header, field, win32_version_value);
+  GET_FIELD(pe->optional_header, field, size_of_image);
+  GET_FIELD(pe->optional_header, field, size_of_headers);
+  GET_FIELD(pe->optional_header, field, checksum);
+  GET_FIELD(pe->optional_header, field, subsystem);
+  GET_FIELD(pe->optional_header, field, dll_characteristics);
+  GET_FIELD(pe->optional_header, field, size_of_stack_reserve);
+  GET_FIELD(pe->optional_header, field, size_of_stack_commit);
+  GET_FIELD(pe->optional_header, field, size_of_head_reserve);
+  GET_FIELD(pe->optional_header, field, size_of_head_commit);
+  GET_FIELD(pe->optional_header, field, loader_flags);
+  GET_FIELD(pe->optional_header, field, number_of_rva_and_sizes);
 
   return false;
 }
 
-bool pe64_get_optional_field(pe_t *pe, char *buff, char *field, const char *format)
+bool pe64_get_optional_field(pe64_t *pe, char *buff, char *field, const char *format)
 {
-  pe64_optional_header_t *optional_header = pe->optional_header;
+  GET_FIELD(pe->optional_header, field, magic);
+  GET_FIELD(pe->optional_header, field, major_linker_version);
+  GET_FIELD(pe->optional_header, field, minor_linker_version);
+  GET_FIELD(pe->optional_header, field, size_of_code);
+  GET_FIELD(pe->optional_header, field, size_of_initialized_data);
+  GET_FIELD(pe->optional_header, field, size_of_unitialized_data);
+  GET_FIELD(pe->optional_header, field, entry_point);
+  GET_FIELD(pe->optional_header, field, base_of_code);
 
-  GET_FIELD(optional_header, field, magic);
-  GET_FIELD(optional_header, field, major_linker_version);
-  GET_FIELD(optional_header, field, minor_linker_version);
-  GET_FIELD(optional_header, field, size_of_code);
-  GET_FIELD(optional_header, field, size_of_initialized_data);
-  GET_FIELD(optional_header, field, size_of_unitialized_data);
-  GET_FIELD(optional_header, field, entry_point);
-  GET_FIELD(optional_header, field, base_of_code);
-
-  GET_FIELD(optional_header, field, image_base);
-  GET_FIELD(optional_header, field, section_alignment);
-  GET_FIELD(optional_header, field, file_alignment);
-  GET_FIELD(optional_header, field, major_os_version);
-  GET_FIELD(optional_header, field, minor_os_version);
-  GET_FIELD(optional_header, field, major_image_version);
-  GET_FIELD(optional_header, field, minor_image_version);
-  GET_FIELD(optional_header, field, major_subsystem_version);
-  GET_FIELD(optional_header, field, minor_subsystem_version);
-  GET_FIELD(optional_header, field, win32_version_value);
-  GET_FIELD(optional_header, field, size_of_image);
-  GET_FIELD(optional_header, field, size_of_headers);
-  GET_FIELD(optional_header, field, checksum);
-  GET_FIELD(optional_header, field, subsystem);
-  GET_FIELD(optional_header, field, dll_characteristics);
-  GET_FIELD(optional_header, field, size_of_stack_reserve);
-  GET_FIELD(optional_header, field, size_of_stack_commit);
-  GET_FIELD(optional_header, field, size_of_head_reserve);
-  GET_FIELD(optional_header, field, size_of_head_commit);
-  GET_FIELD(optional_header, field, loader_flags);
-  GET_FIELD(optional_header, field, number_of_rva_and_sizes);
+  GET_FIELD(pe->optional_header, field, image_base);
+  GET_FIELD(pe->optional_header, field, section_alignment);
+  GET_FIELD(pe->optional_header, field, file_alignment);
+  GET_FIELD(pe->optional_header, field, major_os_version);
+  GET_FIELD(pe->optional_header, field, minor_os_version);
+  GET_FIELD(pe->optional_header, field, major_image_version);
+  GET_FIELD(pe->optional_header, field, minor_image_version);
+  GET_FIELD(pe->optional_header, field, major_subsystem_version);
+  GET_FIELD(pe->optional_header, field, minor_subsystem_version);
+  GET_FIELD(pe->optional_header, field, win32_version_value);
+  GET_FIELD(pe->optional_header, field, size_of_image);
+  GET_FIELD(pe->optional_header, field, size_of_headers);
+  GET_FIELD(pe->optional_header, field, checksum);
+  GET_FIELD(pe->optional_header, field, subsystem);
+  GET_FIELD(pe->optional_header, field, dll_characteristics);
+  GET_FIELD(pe->optional_header, field, size_of_stack_reserve);
+  GET_FIELD(pe->optional_header, field, size_of_stack_commit);
+  GET_FIELD(pe->optional_header, field, size_of_head_reserve);
+  GET_FIELD(pe->optional_header, field, size_of_head_commit);
+  GET_FIELD(pe->optional_header, field, loader_flags);
+  GET_FIELD(pe->optional_header, field, number_of_rva_and_sizes);
 
   return false;
 }
