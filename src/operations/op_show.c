@@ -37,6 +37,12 @@ void op_show(pe_t *pe, char *info, int section, bool verbose)
     pe_show_optional_header(pe, verbose);
   }
 
+  if (INFO(info, 'd'))
+  {
+    printf("--- Data directories ---\n");
+    pe_show_data_directories(pe);
+  }
+
   if (INFO(info, 's'))
   {
     if (section < 0)

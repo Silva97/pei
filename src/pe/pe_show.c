@@ -35,6 +35,12 @@
     }                                           \
   }
 
+#define PRINT_DATA_DIRECTORY(optional_header, directory)    \
+  PRINT_ALIGNED(#directory,                                 \
+                "{ virtual_address: %08x, size: %08x }",    \
+                optional_header->directory.virtual_address, \
+                optional_header->directory.size)
+
 void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
 {
   pe_seek(pe, offset);
@@ -330,47 +336,53 @@ void pe_show_optional_header(pe_t *pe, bool verbose)
   }
 }
 
-  PRINT_FIELD(optional_header, "x", magic);
-  PRINT_FIELD(optional_header, "x", major_linker_version);
-  PRINT_FIELD(optional_header, "x", minor_linker_version);
-  PRINT_FIELD(optional_header, "x", size_of_code);
-  PRINT_FIELD(optional_header, "x", size_of_initialized_data);
-  PRINT_FIELD(optional_header, "x", size_of_unitialized_data);
-  PRINT_FIELD(optional_header, "x", entry_point);
-  PRINT_FIELD(optional_header, "x", base_of_code);
-
-  PRINT_FIELD(optional_header, PRIx64, image_base);
-  PRINT_FIELD(optional_header, PRIx32, section_alignment);
-  PRINT_FIELD(optional_header, PRIx32, file_alignment);
-  PRINT_FIELD(optional_header, PRIx16, major_os_version);
-  PRINT_FIELD(optional_header, PRIx16, minor_os_version);
-  PRINT_FIELD(optional_header, PRIx16, major_image_version);
-  PRINT_FIELD(optional_header, PRIx16, minor_image_version);
-  PRINT_FIELD(optional_header, PRIx16, major_subsystem_version);
-  PRINT_FIELD(optional_header, PRIx16, minor_subsystem_version);
-  PRINT_FIELD(optional_header, PRIx32, win32_version_value);
-  PRINT_FIELD(optional_header, PRIx32, size_of_image);
-  PRINT_FIELD(optional_header, PRIx32, size_of_headers);
-  PRINT_FIELD(optional_header, PRIx32, checksum);
-  pe_show_subsystem(pe, verbose);
-  pe_show_dll_characteristics(pe, verbose);
-  PRINT_FIELD(optional_header, PRIx64, size_of_stack_reserve);
-  PRINT_FIELD(optional_header, PRIx64, size_of_stack_commit);
-  PRINT_FIELD(optional_header, PRIx64, size_of_head_reserve);
-  PRINT_FIELD(optional_header, PRIx64, size_of_head_commit);
-  PRINT_FIELD(optional_header, PRIx32, loader_flags);
-  PRINT_FIELD(optional_header, PRIx32, number_of_rva_and_sizes);
+void pe32_show_data_directories(pe32_t *pe)
+{
+  PRINT_DATA_DIRECTORY(pe->optional_header, export_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, import_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, resource_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, exception_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, certificate_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, base_relocation_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, debug);
+  PRINT_DATA_DIRECTORY(pe->optional_header, architecture);
+  PRINT_DATA_DIRECTORY(pe->optional_header, global_ptr);
+  PRINT_DATA_DIRECTORY(pe->optional_header, tls_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, load_config_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, bound_import);
+  PRINT_DATA_DIRECTORY(pe->optional_header, iat);
+  PRINT_DATA_DIRECTORY(pe->optional_header, delay_import_descriptor);
+  PRINT_DATA_DIRECTORY(pe->optional_header, clr_runtime_header);
 }
 
-void pe_show_optional_header(pe_t *pe, bool verbose)
+void pe64_show_data_directories(pe64_t *pe)
+{
+  PRINT_DATA_DIRECTORY(pe->optional_header, export_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, import_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, resource_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, exception_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, certificate_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, base_relocation_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, debug);
+  PRINT_DATA_DIRECTORY(pe->optional_header, architecture);
+  PRINT_DATA_DIRECTORY(pe->optional_header, global_ptr);
+  PRINT_DATA_DIRECTORY(pe->optional_header, tls_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, load_config_table);
+  PRINT_DATA_DIRECTORY(pe->optional_header, bound_import);
+  PRINT_DATA_DIRECTORY(pe->optional_header, iat);
+  PRINT_DATA_DIRECTORY(pe->optional_header, delay_import_descriptor);
+  PRINT_DATA_DIRECTORY(pe->optional_header, clr_runtime_header);
+}
+
+void pe_show_data_directories(pe_t *pe)
 {
   if (pe->type == MAGIC_32BIT)
   {
-    pe32_show_optional_header(pe, verbose);
+    pe32_show_data_directories((pe32_t *)pe);
   }
   else
   {
-    pe64_show_optional_header(pe, verbose);
+    pe64_show_data_directories((pe64_t *)pe);
   }
 }
 

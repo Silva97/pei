@@ -177,6 +177,7 @@ void show_help()
        "                      g     General informations about the executable. (default)\n"
        "                      c     Show coff header.\n"
        "                      o     Show optional header.\n"
+       "                      d     Show data directories from optional header.\n"
        "                      s     Show the specified section or all sections.\n"
        "                    Combine characters to show the informations of your choice.\n"
        "                    Example: pei show test.exe gc\n"
