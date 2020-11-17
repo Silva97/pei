@@ -13,6 +13,7 @@ typedef struct pe_block
 } pe_block_t;
 
 FILE *pe_open(char *filename);
+bool pe_check(FILE *executable);
 pe_t *pe_parse(FILE *executable);
 void pe_write_header(pe_t *pe);
 void pe_seek(pe_t *pe, long int offset);
