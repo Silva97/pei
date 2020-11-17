@@ -10,6 +10,24 @@
     return true;                             \
   }
 
+#define GET_FIELD_DATA_DIRECTORY(structure, name, field, subfield) \
+  if (!strcmp(name, #field))                                       \
+  {                                                                \
+    if (!strcmp(subfield, "virtual_address"))                      \
+    {                                                              \
+      sprintf(buff, format, structure->field.virtual_address);     \
+    }                                                              \
+    else if (!strcmp(subfield, "size"))                            \
+    {                                                              \
+      sprintf(buff, format, structure->field.size);                \
+    }                                                              \
+    else                                                           \
+    {                                                              \
+      return false;                                                \
+    }                                                              \
+    return true;                                                   \
+  }
+
 bool pe_get_field(pe_t *pe, char *buff, char *field_string, const char *format)
 {
   unsigned int section = -1;
@@ -112,6 +130,30 @@ bool pe32_get_optional_field(pe32_t *pe, char *buff, char *field, const char *fo
   GET_FIELD(pe->optional_header, field, loader_flags);
   GET_FIELD(pe->optional_header, field, number_of_rva_and_sizes);
 
+  // We assume that this function always will be called by pe_get_field() on
+  // a executable single-threaded. This code will broken if it is not true. :)
+  char *dir_field = strtok(NULL, ".");
+  if (!dir_field)
+  {
+    return false;
+  }
+
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, export_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, import_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, resource_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, exception_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, certificate_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, base_relocation_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, debug, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, architecture, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, global_ptr, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, tls_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, load_config_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, bound_import, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, iat, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, delay_import_descriptor, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, clr_runtime_header, dir_field);
+
   return false;
 }
 
@@ -147,6 +189,30 @@ bool pe64_get_optional_field(pe64_t *pe, char *buff, char *field, const char *fo
   GET_FIELD(pe->optional_header, field, size_of_head_commit);
   GET_FIELD(pe->optional_header, field, loader_flags);
   GET_FIELD(pe->optional_header, field, number_of_rva_and_sizes);
+
+  // We assume that this function always will be called by pe_get_field() on
+  // a executable single-threaded. This code will broken if it is not true. :)
+  char *dir_field = strtok(NULL, ".");
+  if (!dir_field)
+  {
+    return false;
+  }
+
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, export_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, import_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, resource_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, exception_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, certificate_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, base_relocation_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, debug, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, architecture, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, global_ptr, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, tls_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, load_config_table, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, bound_import, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, iat, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, delay_import_descriptor, dir_field);
+  GET_FIELD_DATA_DIRECTORY(pe->optional_header, field, clr_runtime_header, dir_field);
 
   return false;
 }

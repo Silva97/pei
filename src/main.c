@@ -192,6 +192,7 @@ void show_help()
        "                    format to print the field. Examples:"
        "                      pei g test.exe section.1.name '%s'\n"
        "                      pei g test.exe optional.entry_point '0x%x'\n"
+       "                      pei g test.exe optional.iat.virtual_address\n"
        "  z,zeros           Finds biggest zeroed block on sections of the executable.\n"
        "  i,inject          Injects code into the section or, if not specified, in the\n"
        "                    biggest zeroed block between all sections.\n"
