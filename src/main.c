@@ -189,7 +189,7 @@ void show_help()
        "                      optional   Get field from Optional Header.\n"
        "                      section    Get field from Section Header.\n"
        "                    The instruction given an extra argument to specify the\n"
-       "                    format to print the field. Examples:"
+       "                    format to print the field. Examples:\n"
        "                      pei g test.exe section.1.name '%s'\n"
        "                      pei g test.exe optional.entry_point '0x%x'\n"
        "                      pei g test.exe optional.iat.virtual_address\n"
