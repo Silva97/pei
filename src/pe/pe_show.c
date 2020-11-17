@@ -95,7 +95,7 @@ void pe_show_info(pe_t *pe)
 
   fseek(pe->file, 0, SEEK_END);
   size_t size = ftell(pe->file);
-  PRINT_ALIGNED("size", "%zu KiB", size / 1024);
+  PRINT_ALIGNED("size", "%lu KiB", size / 1024);
 }
 
 void pe_show_subsystem(pe_t *pe, bool verbose)
