@@ -37,6 +37,7 @@ pe_t *pe_parse(FILE *executable)
   }
 
   pe->coff_header = coff_header;
+  pe->number_of_sections = coff_header->number_of_sections;
 
   // Checking the magic number to determinate the correct optional header struct size
   last_position = ftell(executable);

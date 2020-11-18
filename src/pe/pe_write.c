@@ -27,7 +27,7 @@ void pe_write_header(pe_t *pe)
     fwrite(pe->optional_header, sizeof(pe64_optional_header_t), 1, pe->file);
   }
 
-  for (int i = 0; i < pe->coff_header->number_of_sections; i++)
+  for (int i = 0; i < pe->number_of_sections; i++)
   {
     fwrite(pe->section_header[i], sizeof(pe_section_header_t), 1, pe->file);
   }

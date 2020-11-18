@@ -14,6 +14,7 @@
 typedef struct pe
 {
   int16_t type;
+  uint16_t number_of_sections;
   FILE *file;
   struct pe_coff_header *coff_header;
   void *optional_header;
@@ -23,6 +24,7 @@ typedef struct pe
 typedef struct pe32
 {
   int16_t type;
+  uint16_t number_of_sections;
   FILE *file;
   struct pe_coff_header *coff_header;
   struct pe32_optional_header *optional_header;
@@ -32,6 +34,7 @@ typedef struct pe32
 typedef struct pe64
 {
   int16_t type;
+  uint16_t number_of_sections;
   FILE *file;
   struct pe_coff_header *coff_header;
   struct pe64_optional_header *optional_header;
