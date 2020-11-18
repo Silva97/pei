@@ -11,7 +11,7 @@ With `pei` you can:
 - Find zeroed blocks of data on the sections of the executable.
 - Inject code to be executed before the OEP of the executable.
 
-## Compilation
+## Compilation and installation
 Just run the commands below to compile the project:
 ```bash
 git clone https://github.com/Silva97/pei
@@ -19,7 +19,12 @@ cd pei
 make
 ```
 
-Done! `pei` has no dependencies other than libc.
+Done! `pei` has no dependencies other than libc. To install, just run:
+```bash
+sudo make install
+```
+
+If you doesn't want more `pei` on your system, run `sudo make uninstall`. :(
 
 # How it injects code
 With `pei` you can specify the section to inject the code or leave the tool to select the
