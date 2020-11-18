@@ -40,7 +40,7 @@ bool pe_get_field(pe_t *pe, char *buff, char *field_string, const char *format)
   if (!strcmp(structure, "section"))
   {
     char *secstring = strtok(NULL, ".");
-    if (!secstring || sscanf(secstring, "%d", &section) != 1)
+    if (!secstring || sscanf(secstring, "%u", &section) != 1)
     {
       return false;
     }

@@ -25,9 +25,16 @@ bool pe_check(FILE *executable)
   int32_t signature_address;
 
   fseek(executable, PE_SIGNATURE_ADDRESS_OFFSET, SEEK_SET);
-  fread(&signature_address, sizeof signature_address, 1, executable);
+  if (!fread(&signature_address, sizeof signature_address, 1, executable))
+  {
+    return false;
+  }
+
   fseek(executable, signature_address, SEEK_SET);
-  fread(signature, PE_SIGNATURE_SIZE, 1, executable);
+  if (!fread(signature, PE_SIGNATURE_SIZE, 1, executable))
+  {
+    return false;
+  }
 
   return !memcmp(signature, PE_SIGNATURE, PE_SIGNATURE_SIZE);
 }

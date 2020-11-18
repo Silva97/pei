@@ -5,6 +5,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <limits.h>
 
 #define PE_SIGNATURE_ADDRESS_OFFSET 0x3c
 #define PE_SIGNATURE "PE\0" // {'P', 'E', '\0', '\0'}
@@ -170,7 +171,7 @@ enum pe_section_flags
   MEM_SHARED = 0x10000000,
   MEM_EXECUTE = 0x20000000,
   MEM_READ = 0x40000000,
-  MEM_WRITE = 0x80000000,
+  MEM_WRITE = INT_MIN, // Workaround to get 0x80000000 value
 };
 
 enum pe_machine_type

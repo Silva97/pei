@@ -10,9 +10,12 @@ void pe_write_header(pe_t *pe)
 {
   int32_t signature_address;
   pe_seek(pe, PE_SIGNATURE_ADDRESS_OFFSET);
-  fread(&signature_address, sizeof signature_address, 1, pe->file);
-  pe_seek(pe, signature_address + PE_SIGNATURE_SIZE);
+  if (!fread(&signature_address, sizeof signature_address, 1, pe->file))
+  {
+    return;
+  }
 
+  pe_seek(pe, signature_address + PE_SIGNATURE_SIZE);
   fwrite(pe->coff_header, sizeof(pe_coff_header_t), 1, pe->file);
 
   if (pe->type == MAGIC_32BIT)
