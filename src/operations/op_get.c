@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "operations.h"
 
-void op_get(pe_t *pe, char *field_string, const char *format, int section)
+void op_get(pe_t *pe, char *field_string, const char *format)
 {
   char buff[32] = {0};
 

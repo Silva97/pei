@@ -17,6 +17,7 @@ void show_help();
 
 int main(int argc, char **argv)
 {
+  char *field;
   int section_number = -1;
   int verbose = false;
   char *code_file = NULL;
@@ -78,6 +79,10 @@ int main(int argc, char **argv)
   }
 
   pe_t *pe = pe_parse(executable);
+  if (!pe)
+  {
+    show_error("File '%s' is corrupted or is not a valid PE32 or PE32+ executable.", filename);
+  }
 
   // Operations
   switch (operation[0])
@@ -100,9 +105,9 @@ int main(int argc, char **argv)
                  "See help: pei -h");
     }
 
-    char *field = argv[optind + 2];
+    field = argv[optind + 2];
     const char *format = argv[optind + 3];
-    op_get(pe, field, format, section_number);
+    op_get(pe, field, format);
     break;
   case 'z':
     validate_operation(operation, "zeros");
