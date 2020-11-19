@@ -218,15 +218,16 @@ void show_help()
        "                    pei g test.exe optional.entry_point '0x%x'\n"
        "                    pei g test.exe optional.iat.virtual_address\n\n"
 
-       "  e,edit          Following the same format to specify the field, you can edit\n"
-       "                  the value of the field using one of the operators:\n"
+       "  e,edit          Following the same format to specify the field on get\n"
+       "                  operation, you can edit the value of the field using\n"
+       "                  one of the operators:\n"
        "                    =    Sets the exactly value of the field.\n"
        "                    |=   Logical or attribution. (same as C language)\n"
-       "                    &=   Logical and attribution.\n"
-       "                  The value can be in hexadecimal, decimal or octal.\n"
-       "                  Examples:\n"
+       "                    &=   Logical and attribution. (same as C language)\n"
+       "                  The value can be in hexadecimal, decimal or octal using\n"
+       "                  the same format of C language numbers. Examples:\n"
        "                    pei e test.exe optional.entry_point = 0x12345\n"
-       "                    pei e test.exe section.0.characteristics '|=' 0x40\n"
+       "                    pei e test.exe section.0.characteristics '|=' 0x40\n\n"
 
        "  z,zeros         Finds biggest zeroed block on sections of the executable.\n\n"
 
