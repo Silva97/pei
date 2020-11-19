@@ -7,6 +7,8 @@ With `pei` you can:
 - Display informations about the executable like COFF header, sections and more.
 - Get individual values from fields of the headers to manipulate the values by scripts. Example:  
   `pei get test.exe optional.entry_point '0x%x'` - Will print `0x12345`
+- Edit individual fields. Example:  
+  `pei edit test.exe optional.entry_point = 0xabcd`
 - Manipulate memory access permissions to sections of the executable.
 - Find zeroed blocks of data on the sections of the executable.
 - Inject code to be executed before the OEP of the executable.
@@ -60,6 +62,9 @@ pei s test.exe gc      # Show general informations and COFF header
 pei g test.exe optional.entry_point '%x'         # Entrypoint in hexadecimal
 pei g test.exe optional.iat.virtual_address '%x' # Virtual address of IAT structure
 pei g test.exe section.0.name '%s'               # Name of the first section
+
+pei e test.exe section.0.name = .code            # Edit the name of the first section
+pei e test.exe optional.entry_point = 0xaabb1234 # Edit the entry point
 
 # Inject code from `payload` raw binary file to `test.exe` entry point
 pei -f payload i test.exe
