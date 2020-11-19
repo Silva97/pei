@@ -10,6 +10,7 @@
 
 void op_show(pe_t *pe, char *info, int section, bool verbose);
 void op_get(pe_t *pe, char *field_string, const char *format);
+void op_edit(pe_t *pe, char *field_string, char *operator, char * value);
 void op_zeros(pe_t *pe, int section);
 void op_inject(pe_t *pe, char *filename, int section);
 void op_flags(pe_t *pe, char *flags, int section);

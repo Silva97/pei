@@ -219,7 +219,16 @@ bool pe64_get_optional_field(pe64_t *pe, char *buff, char *field, const char *fo
 
 bool pe_get_section_field(pe_t *pe, char *buff, unsigned int section, char *field, const char *format)
 {
-  GET_FIELD(pe->section_header[section], field, name);
+  char name[SECTION_FIELD_NAME_SIZE + 1];
+  if (!strcmp(field, "name"))
+  {
+    strncpy(name, pe->section_header[section]->name, SECTION_FIELD_NAME_SIZE);
+    name[SECTION_FIELD_NAME_SIZE] = '\0';
+
+    sprintf(buff, format, name);
+    return true;
+  }
+
   GET_FIELD(pe->section_header[section], field, virtual_size);
   GET_FIELD(pe->section_header[section], field, virtual_address);
   GET_FIELD(pe->section_header[section], field, size_of_raw_data);

@@ -10,6 +10,7 @@
 #define PE_SIGNATURE_ADDRESS_OFFSET 0x3c
 #define PE_SIGNATURE "PE\0" // {'P', 'E', '\0', '\0'}
 #define PE_SIGNATURE_SIZE (sizeof PE_SIGNATURE)
+#define SECTION_FIELD_NAME_SIZE 8
 
 typedef struct pe
 {
@@ -126,7 +127,7 @@ typedef struct pe64_optional_header
 
 typedef struct pe_section_header
 {
-  char name[8];
+  char name[SECTION_FIELD_NAME_SIZE];
   uint32_t virtual_size;
   uint32_t virtual_address;
   uint32_t size_of_raw_data;

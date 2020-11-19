@@ -439,7 +439,7 @@ void pe_show_section_characteristics(pe_t *pe, unsigned int section_number, bool
 
 void pe_show_section_header(pe_t *pe, unsigned int section_number, bool verbose)
 {
-  PRINT_ALIGNED("name", "%-8s", pe->section_header[section_number]->name);
+  PRINT_ALIGNED("name", "%-8.8s", pe->section_header[section_number]->name);
   PRINT_FIELD(pe->section_header[section_number], PRIx32, virtual_size);
   PRINT_FIELD(pe->section_header[section_number], PRIx32, virtual_address);
   PRINT_FIELD(pe->section_header[section_number], PRIx32, size_of_raw_data);

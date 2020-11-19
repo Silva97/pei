@@ -18,6 +18,8 @@ void show_help();
 int main(int argc, char **argv)
 {
   char *field;
+  char *operator_string;
+  char *value;
   int section_number = -1;
   int verbose = false;
   char *code_file = NULL;
@@ -108,6 +110,21 @@ int main(int argc, char **argv)
     field = argv[optind + 2];
     const char *format = argv[optind + 3];
     op_get(pe, field, format);
+    break;
+  case 'e':
+    validate_operation(operation, "edit");
+    if (pos_argc < 5)
+    {
+      show_error("%s",
+                 "Expected <field>, <operator> and <value> arguments.\n"
+                 "Example: pei e test.exe optional.entry_point = 0x12345\n"
+                 "See help: pei -h");
+    }
+
+    field = argv[optind + 2];
+    operator_string = argv[optind + 3];
+    value = argv[optind + 4];
+    op_edit(pe, field, operator_string, value);
     break;
   case 'z':
     validate_operation(operation, "zeros");
@@ -200,6 +217,17 @@ void show_help()
        "                    pei g test.exe section.1.name '%s'\n"
        "                    pei g test.exe optional.entry_point '0x%x'\n"
        "                    pei g test.exe optional.iat.virtual_address\n\n"
+
+       "  e,edit          Following the same format to specify the field on get\n"
+       "                  operation, you can edit the value of the field using\n"
+       "                  one of the operators:\n"
+       "                    =    Sets the exactly value of the field.\n"
+       "                    |=   Logical or attribution. (same as C language)\n"
+       "                    &=   Logical and attribution. (same as C language)\n"
+       "                  The value can be in hexadecimal, decimal or octal using\n"
+       "                  the same format of C language numbers. Examples:\n"
+       "                    pei e test.exe optional.entry_point = 0x12345\n"
+       "                    pei e test.exe section.0.characteristics '|=' 0x40\n\n"
 
        "  z,zeros         Finds biggest zeroed block on sections of the executable.\n\n"
 
