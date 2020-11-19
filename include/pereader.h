@@ -35,6 +35,9 @@ bool pe_get_section_field(pe_t *pe, char *buff, unsigned int section, char *fiel
 bool pe_set_field(pe_t *pe, char *field_string, pe_operator_t operator, char * value);
 bool pe_set_coff_field(pe_t *pe, char *field, pe_operator_t operator, char * value);
 bool pe_set_section_field(pe_t *pe, unsigned int section, char *field, pe_operator_t operator, char * value);
+bool pe_set_optional_field(pe_t *pe, char *field, pe_operator_t operator, char * value);
+bool pe32_set_optional_field(pe32_t *pe, char *field, pe_operator_t operator, char * value);
+bool pe64_set_optional_field(pe64_t *pe, char *field, pe_operator_t operator, char * value);
 
 void pe_dump(pe_t *pe, uint32_t offset, uint32_t size);
 void pe_show_type(pe_t *pe);
