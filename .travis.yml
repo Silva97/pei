@@ -1,0 +1,13 @@
+os: windows
+language: c
+compiler:
+  - gcc
+
+install:
+  - choco install make
+
+before_script:
+  - make
+  - make compile_test_pe
+
+script: bash runtests.sh

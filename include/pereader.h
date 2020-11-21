@@ -1,22 +1,24 @@
 #ifndef _PEREADER_H
 #define _PEREADER_H
 
+#include "win.h"
+
 #include <stdio.h>
 #include <stdbool.h>
 #include "pe.h"
 
 typedef struct pe_block
 {
-    uint64_t offset;
-    uint64_t size;
-    uint16_t section;
+  uint64_t offset;
+  uint64_t size;
+  uint16_t section;
 } pe_block_t;
 
 typedef enum pe_operator
 {
-    OP_EQUAL,
-    OP_OR_EQUAL,
-    OP_AND_EQUAL,
+  OP_EQUAL,
+  OP_OR_EQUAL,
+  OP_AND_EQUAL,
 } pe_operator_t;
 
 FILE *pe_open(char *filename);

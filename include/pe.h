@@ -3,6 +3,8 @@
 #ifndef PE_H
 #define PE_H
 
+#include "win.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include <limits.h>
