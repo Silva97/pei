@@ -45,5 +45,5 @@ test: CFLAGS += -I tests/utils/include
 test: $(OBJ)
 	@mkdir -p obj
 	@$(CC) $(CFLAGS) -c -DANSI_COLORS tests/test_$(name).c -o obj/test_$(name).o
-	@$(CC) $(OBJ) obj/test_$(name).o -o /tmp/metric_test
-	@/tmp/metric_test
+	@$(CC) $(OBJ) obj/test_$(name).o -o metric_test
+	@./metric_test
