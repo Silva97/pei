@@ -88,7 +88,7 @@ bool pe_set_field(pe_t *pe, char *field_string, pe_operator_t operator, char * v
 bool pe_set_coff_field(pe_t *pe, char *field, pe_operator_t operator, char * value)
 {
   int64_t number = 0;
-  sscanf(value, "%li", &number);
+  sscanf(value, "%lli", &number);
 
   SET_NUMBER_FIELD(pe->coff_header, field, machine, operator, number);
   SET_NUMBER_FIELD(pe->coff_header, field, number_of_sections, operator, number);
@@ -104,7 +104,7 @@ bool pe_set_coff_field(pe_t *pe, char *field, pe_operator_t operator, char * val
 bool pe_set_section_field(pe_t *pe, unsigned int section, char *field, pe_operator_t operator, char * value)
 {
   int64_t number = 0;
-  sscanf(value, "%li", &number);
+  sscanf(value, "%lli", &number);
 
   SET_STRING_FIELD(pe->section_header[section], field, name, SECTION_FIELD_NAME_SIZE, value);
   SET_NUMBER_FIELD(pe->section_header[section], field, virtual_size, operator, number);
@@ -133,7 +133,7 @@ bool pe_set_optional_field(pe_t *pe, char *field, pe_operator_t operator, char *
 bool pe32_set_optional_field(pe32_t *pe, char *field, pe_operator_t operator, char * value)
 {
   int64_t number = 0;
-  sscanf(value, "%li", &number);
+  sscanf(value, "%lli", &number);
 
   SET_NUMBER_FIELD(pe->optional_header, field, magic, operator, number);
   SET_NUMBER_FIELD(pe->optional_header, field, major_linker_version, operator, number);
@@ -198,7 +198,7 @@ bool pe32_set_optional_field(pe32_t *pe, char *field, pe_operator_t operator, ch
 bool pe64_set_optional_field(pe64_t *pe, char *field, pe_operator_t operator, char * value)
 {
   int64_t number = 0;
-  sscanf(value, "%li", &number);
+  sscanf(value, "%lli", &number);
 
   SET_NUMBER_FIELD(pe->optional_header, field, magic, operator, number);
   SET_NUMBER_FIELD(pe->optional_header, field, major_linker_version, operator, number);
