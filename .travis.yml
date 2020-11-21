@@ -1,0 +1,10 @@
+os: windows
+language: c
+compiler:
+  - gcc
+
+before_script:
+  - make
+  - make compile_test_pe
+
+script: bash runtests.sh
