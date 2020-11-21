@@ -41,7 +41,7 @@ uninstall:
 compile_test_pe:
 	$(CC) -m64 tests/utils/test.c -o tests/utils/test.exe
 
-test: CFLAGS += -I tests/utils/include
+test: CFLAGS += -I tests/utils/include -Wno-unused-variable
 test: $(OBJ)
 	@mkdir -p obj
 	@$(CC) $(CFLAGS) -c -DANSI_COLORS tests/test_$(name).c -o obj/test_$(name).o

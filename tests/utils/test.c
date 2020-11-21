@@ -1,7 +1,9 @@
 #include <stdio.h>
 
+char dump[1024] = "Hello World!";
+
 int main(void)
 {
-  puts("Hello World!");
+  puts(dump);
   return 0;
 }
