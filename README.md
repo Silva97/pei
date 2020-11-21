@@ -1,4 +1,5 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Silva97/pei)
+![Build status](https://travis-ci.com/Silva97/pei.svg?branch=master)
 
 # pei - PE Injector
 Command-line tool for inject code and manipulate PE32 (32-bit) and PE32+ (64-bit) executables.  
