@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <inttypes.h>
 #include "metric.h"
 #include "pe.h"
 #include "pereader.h"
