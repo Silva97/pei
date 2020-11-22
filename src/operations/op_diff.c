@@ -5,6 +5,7 @@
 #define C_ORIGINAL "\x1b[31m"
 #define C_MODIFIED "\x1b[32m"
 #define C_NORMAL "\x1b[0m"
+#define DUMP_BLOCK_SIZE 16
 
 #define DIFF_FIELD(field, name)                                     \
   if (first_pe->field != second_pe->field)                          \
@@ -31,6 +32,8 @@ static void print_optional_diff(pe_t *first_pe, pe_t *second_pe, bool colorize);
 static void print_optional32_diff(pe32_t *first_pe, pe32_t *second_pe, bool colorize);
 static void print_optional64_diff(pe64_t *first_pe, pe64_t *second_pe, bool colorize);
 static void print_section_diff(pe_t *first_pe, pe_t *second_pe, unsigned int section, bool colorize);
+static void print_dump_diff(pe_t *first_pe, pe_t *second_pe, unsigned int section, bool colorize);
+static void print_data_diff(uint32_t offset, unsigned char *first_data, unsigned char *second_data, size_t size, bool colorize);
 
 void op_diff(pe_t *first_pe, char *filename, bool colorize, int section)
 {
@@ -49,6 +52,25 @@ void op_diff(pe_t *first_pe, char *filename, bool colorize, int section)
     print_section_diff(first_pe, second_pe, i, colorize);
   }
 
+  if (section > first_pe->number_of_sections)
+  {
+    goto end;
+  }
+
+  // Show differences between section's datas
+  putchar('\n');
+  if (section >= 0)
+  {
+    print_dump_diff(first_pe, second_pe, section, colorize);
+    goto end;
+  }
+
+  for (int i = 0; i < first_pe->number_of_sections && i < second_pe->number_of_sections; i++)
+  {
+    print_dump_diff(first_pe, second_pe, i, colorize);
+  }
+
+end:
   pe_free(second_pe);
 }
 
@@ -225,4 +247,90 @@ static void print_section_diff(pe_t *first_pe, pe_t *second_pe, unsigned int sec
   DIFF_SECTION_FIELD(section, number_of_relocations);
   DIFF_SECTION_FIELD(section, number_of_line_numbers);
   DIFF_SECTION_FIELD(section, characteristics);
+}
+
+static void print_dump_diff(pe_t *first_pe, pe_t *second_pe, unsigned int section, bool colorize)
+{
+  bool first_print = true;
+
+  if (section > first_pe->number_of_sections || section > second_pe->number_of_sections)
+  {
+    return;
+  }
+
+  pe_section_header_t *first_section = first_pe->section_header[section];
+  unsigned char first_data[16];
+  unsigned char second_data[16];
+  uint32_t offset = first_section->pointer_to_raw_data;
+  uint32_t final_offset = first_section->pointer_to_raw_data + first_section->size_of_raw_data;
+
+  pe_seek(first_pe, offset);
+  pe_seek(second_pe, offset);
+  for (; offset < final_offset; offset += DUMP_BLOCK_SIZE)
+  {
+    size_t count = first_section->size_of_raw_data - offset;
+    count = (count < DUMP_BLOCK_SIZE)
+                ? count
+                : DUMP_BLOCK_SIZE;
+
+    if (fread(first_data, 1, count, first_pe->file) < count)
+    {
+      goto read_file_error;
+    }
+
+    if (fread(second_data, 1, count, second_pe->file) < count)
+    {
+      goto read_file_error;
+    }
+
+    if (!memcmp(first_data, second_data, count))
+    {
+      // If the content is equal, do nothing
+      continue;
+    }
+
+    if (first_print)
+    {
+      // Only print "header" if has any difference on the section
+      printf("@section %u\n", section);
+      first_print = false;
+    }
+
+    print_data_diff(offset, first_data, second_data, count, colorize);
+  }
+
+  return;
+
+read_file_error:
+  perror("diff error");
+  exit(EXIT_FAILURE);
+}
+
+static void print_data_diff(uint32_t offset, unsigned char *first_data, unsigned char *second_data, size_t size, bool colorize)
+{
+  printf("-0x%x ", offset);
+  for (size_t i = 0; i < size; i++)
+  {
+    if (!colorize || first_data[i] == second_data[i])
+    {
+      printf("%02x ", first_data[i]);
+      continue;
+    }
+
+    printf(C_ORIGINAL "%02x " C_NORMAL, first_data[i]);
+  }
+
+  printf("\n+0x%x ", offset);
+  for (size_t i = 0; i < size; i++)
+  {
+    if (!colorize || first_data[i] == second_data[i])
+    {
+      printf("%02x ", second_data[i]);
+      continue;
+    }
+
+    printf(C_MODIFIED "%02x " C_NORMAL, second_data[i]);
+  }
+
+  putchar('\n');
 }
