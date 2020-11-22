@@ -9,3 +9,4 @@ function run_tests() {
 }
 
 time -p run_tests
+exit 0
