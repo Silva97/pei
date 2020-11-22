@@ -22,6 +22,7 @@ int main(int argc, char **argv)
   char *value;
   int section_number = -1;
   int verbose = false;
+  int colorize = false;
   char *code_file = NULL;
 
   struct option options[] = {
@@ -29,13 +30,14 @@ int main(int argc, char **argv)
       {"file", required_argument, NULL, 'f'},
       {"section", required_argument, NULL, 's'},
       {"verbose", no_argument, &verbose, true},
+      {"color", no_argument, &colorize, true},
       {"version", no_argument, NULL, 'V'},
       {0, 0, 0, 0},
   };
 
   int c;
   int option_index;
-  while ((c = getopt_long(argc, argv, "hf:s:vV", options, &option_index)) >= 0)
+  while ((c = getopt_long(argc, argv, "hf:s:vcV", options, &option_index)) >= 0)
   {
     switch (c)
     {
@@ -55,6 +57,9 @@ int main(int argc, char **argv)
       break;
     case 'v':
       verbose = true;
+      break;
+    case 'c':
+      colorize = true;
       break;
     case 'V':
       show_version_info();
@@ -146,6 +151,18 @@ int main(int argc, char **argv)
     char *flags = argv[optind + 2];
     op_flags(pe, flags, section_number);
     break;
+  case 'd':
+    validate_operation(operation, "diff");
+    if (pos_argc < 3)
+    {
+      show_error("%s\n%s",
+                 "Expected <second_executable> argument. Example: pei diff exec1.exe exec2.exe",
+                 "See help: pei -h");
+    }
+
+    char *filename = argv[optind + 2];
+    op_diff(pe, filename, colorize, section_number);
+    break;
   default:
     show_error("'%s' is an invalid operation.", operation);
   }
@@ -166,7 +183,7 @@ void show_version_info()
   puts("Developed by Luiz Felipe <felipe.silva337@yahoo.com>\n"
        "Distributed under the MIT License.\n\n"
 
-       "pei v1.0.1");
+       "pei v1.1.0");
 }
 
 void show_help()
@@ -185,6 +202,7 @@ void show_help()
        "  -h,--help         Show this help message.\n"
        "  -V,--version      Show version information.\n"
        "  -v,--verbose      Verbose output.\n"
+       "  -c,--color        Colorize output.\n"
        "  -f,--file <name>  Read the code from the binary file.\n"
        "  -s,--section <number>\n"
        "                    Do operation only on the specific section. Section is the\n"
@@ -239,5 +257,8 @@ void show_help()
        "  f,flags         Update the section flags. Argument is a list of characters\n"
        "                  specifying the flags to make enabled. Any flag who is not on\n"
        "                  the list will be disabled. Example: `pei f test.exe rx`\n"
-       "                    r - read | w - write | x - execute\n");
+       "                    r - read | w - write | x - execute\n\n"
+
+       "  d,diff          Prints the differences between two executables.\n"
+       "                  Example: `pei d test1.exe test2.exe`\n");
 }
