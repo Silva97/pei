@@ -13,7 +13,7 @@
     METRIC_ASSERT(pe64->field == number);                 \
   }
 
-#define ASSERT_FIELD_STRING(field, name)                  \
+#define ASSERT_STRING_FIELD(field, name)                  \
   {                                                       \
     char buff[32];                                        \
     char field_name[] = name;                             \
@@ -112,7 +112,7 @@ test_t test_get_section_fields(void)
 {
   PE_TEST_INIT();
 
-  ASSERT_FIELD_STRING(section_header[2]->name, "section.2.name");
+  ASSERT_STRING_FIELD(section_header[2]->name, "section.2.name");
   ASSERT_FIELD(section_header[2]->virtual_size, "section.2.virtual_size");
   ASSERT_FIELD(section_header[2]->virtual_address, "section.2.virtual_address");
   ASSERT_FIELD(section_header[2]->size_of_raw_data, "section.2.size_of_raw_data");
