@@ -169,7 +169,7 @@ bool pe32_set_optional_field(pe32_t *pe, char *field, pe_operator_t operator, ch
   SET_NUMBER_FIELD(pe->optional_header, field, loader_flags, operator, number);
   SET_NUMBER_FIELD(pe->optional_header, field, number_of_rva_and_sizes, operator, number);
 
-  // We assume that this function always will be called by pe_get_field() on
+  // We assume that this function always will be called by pe_set_field() on
   // a executable single-threaded. This code will broken if it is not true. :)
   char *dir_field = strtok(NULL, ".");
   if (!dir_field)
