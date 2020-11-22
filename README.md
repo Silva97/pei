@@ -14,6 +14,7 @@ With `pei` you can:
 - Manipulate memory access permissions to sections of the executable.
 - Find zeroed blocks of data on the sections of the executable.
 - Inject code to be executed before the OEP of the executable.
+- Compares executables and show **differences** between.
 
 ## Compilation and installation
 Just run the commands below to compile the project:
