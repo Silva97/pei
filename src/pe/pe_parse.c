@@ -95,3 +95,22 @@ free_and_return_null:
   free(pe);
   return NULL;
 }
+
+void pe_free(pe_t *pe)
+{
+  if (!pe)
+  {
+    return;
+  }
+
+  fclose(pe->file);
+  free(pe->coff_header);
+  free(pe->optional_header);
+
+  for (int i = 0; i < pe->number_of_sections; i++)
+  {
+    free(pe->section_header[i]);
+  }
+
+  free(pe);
+}

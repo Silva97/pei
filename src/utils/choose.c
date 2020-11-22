@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdbool.h>
-#include "choice.h"
+#include "choose.h"
 
 char *choose(int value, ...)
 {

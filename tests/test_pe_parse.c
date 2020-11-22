@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include "tests.h"
 
 test_t test_open_pe_executable(void)
@@ -38,7 +37,7 @@ test_t test_parse_pe_executable(void)
   METRIC_ASSERT_STRING(pe->section_header[0]->name, ".text");
   METRIC_ASSERT(pe->section_header[0]->characteristics & MEM_EXECUTE);
 
-  fclose(executable);
+  pe_free((pe_t *)pe);
   METRIC_TEST_OK();
 }
 

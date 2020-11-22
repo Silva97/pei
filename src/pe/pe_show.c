@@ -2,7 +2,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include "pereader.h"
-#include "choice.h"
+#include "choose.h"
 
 #define PALIGN "%-32s"
 

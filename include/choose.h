@@ -1,5 +1,5 @@
-#ifndef _CHOICE_H
-#define _CHOICE_H
+#ifndef _CHOOSE_H
+#define _CHOOSE_H
 
 #define CHOICE(value) \
   value, #value
@@ -9,4 +9,4 @@
 
 char *choose(int value, ...);
 
-#endif /* _CHOICE_H */
+#endif /* _CHOOSE_H */
