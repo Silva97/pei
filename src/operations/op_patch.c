@@ -4,7 +4,12 @@
 
 #define LINE_SIZE 255
 
+#define show_error(line, line_number)                                                        \
+  fprintf(stderr, "Patch error: Line %u has an invalid format:\n  %s\n", line_number, line); \
+  exit(EXIT_FAILURE);
+
 static bool patch_field(pe_t *pe, char *patch_line);
+static bool patch_dump(pe_t *pe, char *patch_line);
 
 void op_patch(pe_t *pe, char *filename)
 {
@@ -33,12 +38,26 @@ void op_patch(pe_t *pe, char *filename)
     {
       if (!patch_field(pe, line))
       {
-        fprintf(stderr, "Patch error: Line %u has an invalid format:\n  %s\n", line_number, line);
-        exit(EXIT_FAILURE);
+        show_error(line, line_number);
       }
     }
 
     line_number++;
+  }
+
+  // Patch sections
+  while (fgets(line, LINE_SIZE, patch))
+  {
+    line_number++;
+    if (line[0] != '+')
+    {
+      continue;
+    }
+
+    if (!patch_dump(pe, line))
+    {
+      show_error(line, line_number);
+    }
   }
 
   if (filename)
@@ -59,4 +78,31 @@ static bool patch_field(pe_t *pe, char *patch_line)
   }
 
   return pe_set_field(pe, field, OP_EQUAL, value);
+}
+
+static bool patch_dump(pe_t *pe, char *patch_line)
+{
+  char *data;
+  char *dump;
+  unsigned char byte;
+
+  long int offset = strtol(patch_line, &dump, 16);
+  if (patch_line == dump)
+  {
+    return false;
+  }
+
+  pe_seek(pe, offset);
+  data = strtok(dump, " ");
+  do
+  {
+    if (sscanf(data, "%02hhx", &byte) != 1)
+    {
+      break;
+    }
+
+    pe_write(pe, &byte, 1);
+  } while ((data = strtok(NULL, " ")));
+
+  return true;
 }
