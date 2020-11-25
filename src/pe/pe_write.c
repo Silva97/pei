@@ -6,6 +6,11 @@ void pe_seek(pe_t *pe, long int offset)
   fseek(pe->file, offset, SEEK_SET);
 }
 
+void pe_write(pe_t *pe, void *data, size_t size)
+{
+  fwrite(data, size, 1, pe->file);
+}
+
 void pe_write_header(pe_t *pe)
 {
   int32_t signature_address;
