@@ -25,6 +25,7 @@ FILE *pe_open(char *filename);
 bool pe_check(FILE *executable);
 pe_t *pe_parse(FILE *executable);
 void pe_free(pe_t *pe);
+void pe_write(pe_t *pe, void *data, size_t size);
 void pe_write_header(pe_t *pe);
 void pe_seek(pe_t *pe, long int offset);
 
