@@ -71,6 +71,9 @@ pei e test.exe optional.entry_point = 0xaabb1234 # Edit the entry point
 
 # Inject code from `payload` raw binary file to `test.exe` entry point
 pei -f payload i test.exe
+
+# Replicates the modifications on t2.exe for t3.exe
+pei diff t1.exe t2.exe | pei patch t3.exe
 ```
 
 **Tip 1**: For see the name of the fields to use with `get` operation, just use `show` operation
