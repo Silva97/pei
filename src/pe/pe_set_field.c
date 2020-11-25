@@ -75,6 +75,11 @@ bool pe_set_field(pe_t *pe, char *field_string, pe_operator_t operator, char * v
     }
 
     field = strtok(NULL, ".");
+    if (!field)
+    {
+      return false;
+    }
+
     return pe_set_section_field(pe, section, field, operator, value);
   }
 
