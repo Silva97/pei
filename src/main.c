@@ -160,8 +160,16 @@ int main(int argc, char **argv)
                  "See help: pei -h");
     }
 
-    char *filename = argv[optind + 2];
+    filename = argv[optind + 2];
     op_diff(pe, filename, colorize, section_number);
+    break;
+  case 'p':
+    validate_operation(operation, "patch");
+    filename = (pos_argc < 3)
+                   ? NULL
+                   : argv[optind + 2];
+
+    op_patch(pe, filename);
     break;
   default:
     show_error("'%s' is an invalid operation.", operation);
@@ -260,5 +268,11 @@ void show_help()
        "                    r - read | w - write | x - execute\n\n"
 
        "  d,diff          Prints the differences between two executables.\n"
-       "                  Example: `pei d test1.exe test2.exe`\n");
+       "                  Example: `pei d test1.exe test2.exe`\n\n"
+
+       "  p,patch         Read the text with the same format as the output of the `diff'\n"
+       "                  operation, and replicate the modifications. If the input file\n"
+       "                  is not specified, read the input from stdin. Examples:\n"
+       "                    pei diff t1.exe t2.exe | pei patch t3.exe\n"
+       "                    pei patch t3.exe diff-output.txt\n");
 }

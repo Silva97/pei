@@ -17,6 +17,7 @@ void op_zeros(pe_t *pe, int section);
 void op_inject(pe_t *pe, char *filename, int section);
 void op_flags(pe_t *pe, char *flags, int section);
 void op_diff(pe_t *first_pe, char *filename, bool colorize, int section);
+void op_patch(pe_t *pe, char *filename);
 
 #define FLAG_SET(flags, flagbit, enable) \
   {                                      \
