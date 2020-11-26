@@ -2,6 +2,7 @@ os: windows
 language: c
 compiler:
   - gcc
+  - clang
 
 install:
   - choco install make
