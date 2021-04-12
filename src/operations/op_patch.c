@@ -80,11 +80,13 @@ static bool patch_field(pe_t *pe, char *patch_line)
   return pe_set_field(pe, field, OP_EQUAL, value);
 }
 
+#define DUMP_BLOCK_SIZE 16
 static bool patch_dump(pe_t *pe, char *patch_line)
 {
+  unsigned char block[DUMP_BLOCK_SIZE];
   char *data;
   char *dump;
-  unsigned char byte;
+  unsigned int block_index = 0;
 
   long int offset = strtol(patch_line, &dump, 16);
   if (patch_line == dump)
@@ -96,13 +98,23 @@ static bool patch_dump(pe_t *pe, char *patch_line)
   data = strtok(dump, " ");
   do
   {
-    if (sscanf(data, "%02hhx", &byte) != 1)
+    if (sscanf(data, "%02hhx", &block[block_index]) != 1)
     {
       break;
     }
 
-    pe_write(pe, &byte, 1);
+    block_index++;
+    if (block_index == DUMP_BLOCK_SIZE)
+    {
+      pe_write(pe, block, DUMP_BLOCK_SIZE);
+      block_index = 0;
+    }
   } while ((data = strtok(NULL, " ")));
+
+  if (block_index > 0)
+  {
+    pe_write(pe, block, block_index);
+  }
 
   return true;
 }
