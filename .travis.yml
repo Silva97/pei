@@ -10,4 +10,4 @@ before_script:
   - make
   - make compile_test_pe
 
-script: bash runtests.sh
+script: bash test.sh
