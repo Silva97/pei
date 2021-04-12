@@ -270,7 +270,7 @@ void show_help()
        "  d,diff          Prints the differences between two executables.\n"
        "                  Example: `pei d test1.exe test2.exe`\n\n"
 
-       "  p,patch         Reads the text with the same format as the output of the `diff'\n"
+       "  p,patch         Reads text with the same format as the output of the `diff'\n"
        "                  operation, and replicate the modifications. If the input file\n"
        "                  is not specified, reads the input from stdin. Examples:\n"
        "                    pei diff t1.exe t2.exe | pei patch t3.exe\n"
