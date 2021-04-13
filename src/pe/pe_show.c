@@ -42,6 +42,7 @@
                 optional_header->directory.virtual_address, \
                 optional_header->directory.size)
 
+// These macro should be an even number or pe_dump doesn't works properly.
 #define DUMP_LINE_SIZE 16
 
 void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
@@ -67,7 +68,7 @@ void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
     }
     else if (i % (DUMP_LINE_SIZE / 2) == 0)
     {
-      fputs("  ", stdout);
+      fputc(' ', stdout);
     }
 
     printf("%02x ", c);
@@ -76,8 +77,13 @@ void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
                                : '.';
   }
 
+  int numbers_left = (i % DUMP_LINE_SIZE)
+                         ? DUMP_LINE_SIZE - (i % DUMP_LINE_SIZE)
+                         : 0;
+  numbers_left = numbers_left * 3 + (numbers_left >= DUMP_LINE_SIZE / 2) + 1;
+
   ascii[ascii_index] = '\0';
-  printf(" |%s|\n", ascii);
+  printf("%*c|%s|\n", numbers_left, ' ', ascii);
 }
 
 void pe_show_type(pe_t *pe)
