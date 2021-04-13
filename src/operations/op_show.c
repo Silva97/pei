@@ -10,7 +10,7 @@ void op_show(pe_t *pe, char *info, int section, bool verbose)
   {
     if (section < 0)
     {
-      fputs("Show error: Section not specified. You can't dump all sections at one time.\n", stderr);
+      fputs("Show error: Section not specified. You can't dump all sections at same time.\n", stderr);
       exit(EXIT_FAILURE);
     }
 
