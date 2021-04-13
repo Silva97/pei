@@ -1,5 +1,6 @@
 #include <string.h>
 #include <inttypes.h>
+#include <ctype.h>
 #include <stdbool.h>
 #include "pereader.h"
 #include "choose.h"
@@ -41,31 +42,42 @@
                 optional_header->directory.virtual_address, \
                 optional_header->directory.size)
 
+#define DUMP_LINE_SIZE 16
+
 void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
 {
-  pe_seek(pe, offset);
+  int i;
+  int ascii_index = 0;
+  char ascii[DUMP_LINE_SIZE + 1];
 
-  for (int i = 0; i < size; i++)
+  pe_seek(pe, offset);
+  for (i = 0; i < size; i++)
   {
     unsigned int c = fgetc(pe->file);
 
-    if (i % 16 == 0)
+    if (i % DUMP_LINE_SIZE == 0)
     {
       if (i)
       {
-        putchar('\n');
+        ascii[ascii_index] = '\0';
+        ascii_index = 0;
+        printf(" |%s|\n", ascii);
       }
       printf("%08x  ", offset + i);
     }
-    else if (i % 8 == 0)
+    else if (i % (DUMP_LINE_SIZE / 2) == 0)
     {
       fputs("  ", stdout);
     }
 
     printf("%02x ", c);
+    ascii[ascii_index++] = (isgraph(c) || c == ' ')
+                               ? c
+                               : '.';
   }
 
-  putchar('\n');
+  ascii[ascii_index] = '\0';
+  printf(" |%s|\n", ascii);
 }
 
 void pe_show_type(pe_t *pe)
