@@ -5,6 +5,7 @@
 #ifdef _WIN32
 
 #define __USE_MINGW_ANSI_STDIO 1
+#define _CRT_SECURE_NO_WARNINGS
 
 #endif /* _WIN32 */
 
