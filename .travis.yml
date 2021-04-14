@@ -1,7 +1,6 @@
 os: windows
 language: c
 compiler:
-  - clang
   - gcc
 
 install:

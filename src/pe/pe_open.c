@@ -1,7 +1,7 @@
+#include "win.h"
 #include <string.h>
 #include <stdbool.h>
 #include "pereader.h"
-#include "win.h"
 
 FILE *pe_open(char *filename)
 {

@@ -1,6 +1,6 @@
+#include "win.h"
 #include <stdlib.h>
 #include "operations.h"
-#include "win.h"
 
 #define READ_DATA_SIZE 512
 

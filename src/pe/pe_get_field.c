@@ -1,3 +1,4 @@
+#include "win.h"
 #include <string.h>
 #include <stdbool.h>
 #include "pe.h"
