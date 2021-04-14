@@ -32,9 +32,11 @@ clean:
 
 install:
 	cp $(BIN) $(INST_DIR)/$(BIN)
+	cp autocomplete.sh /etc/bash_completion.d/pei
 
 uninstall:
 	rm $(INST_DIR)/$(BIN)
+	rm /etc/bash_completion.d/pei
 
 # This rule expects $(CC) is the MinGW-w64 compiler. Example:
 #   CC=x86_64-w64-mingw32-gcc make compile_test_pe
