@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "operations.h"
 
 #define C_ORIGINAL "\x1b[31m"
@@ -24,6 +25,10 @@
     sprintf(fullname, "section.%d." #field, section);                                                                     \
     print_field(fullname, first_pe->section_header[section]->field, second_pe->section_header[section]->field, colorize); \
   }
+
+#define graphchar(c) ((isgraph(c) || c == ' ') \
+                          ? c                  \
+                          : '.')
 
 static void print_field(char *name, uint64_t value1, uint64_t value2, bool colorize);
 static void print_string_field(char *name, char *value1, char *value2, bool colorize);
@@ -306,31 +311,41 @@ read_file_error:
   exit(EXIT_FAILURE);
 }
 
+#define ASCII_MAXIMUM_CHAR_SIZE (sizeof(C_MODIFIED) + sizeof(C_NORMAL) + 1)
+#define DUMP_MAXIMUM_BYTE_SIZE (sizeof(C_MODIFIED) + sizeof(C_NORMAL) + 3)
+
 static void print_data_diff(uint32_t offset, unsigned char *first_data, unsigned char *second_data, size_t size, bool colorize)
 {
-  printf("-0x%x ", offset);
+  int ascii_original_index = 0;
+  int ascii_modified_index = 0;
+  int dump_original_index = 0;
+  int dump_modified_index = 0;
+  char ascii_original[size * ASCII_MAXIMUM_CHAR_SIZE];
+  char ascii_modified[size * ASCII_MAXIMUM_CHAR_SIZE];
+  char dump_original[size * DUMP_MAXIMUM_BYTE_SIZE];
+  char dump_modified[size * DUMP_MAXIMUM_BYTE_SIZE];
+
   for (size_t i = 0; i < size; i++)
   {
     if (!colorize || first_data[i] == second_data[i])
     {
-      printf("%02x ", first_data[i]);
+      dump_original_index += sprintf(dump_original + dump_original_index, "%02x ", first_data[i]);
+      dump_modified_index += sprintf(dump_modified + dump_modified_index, "%02x ", second_data[i]);
+
+      ascii_original[ascii_original_index++] = graphchar(first_data[i]);
+      ascii_modified[ascii_modified_index++] = graphchar(second_data[i]);
+      ascii_original[ascii_original_index] = '\0';
+      ascii_modified[ascii_modified_index] = '\0';
       continue;
     }
 
-    printf(C_ORIGINAL "%02x " C_NORMAL, first_data[i]);
+    dump_original_index += sprintf(dump_original + dump_original_index, C_ORIGINAL "%02x " C_NORMAL, first_data[i]);
+    dump_modified_index += sprintf(dump_modified + dump_modified_index, C_MODIFIED "%02x " C_NORMAL, second_data[i]);
+
+    ascii_original_index += sprintf(ascii_original + ascii_original_index, C_ORIGINAL "%c" C_NORMAL, graphchar(first_data[i]));
+    ascii_modified_index += sprintf(ascii_modified + ascii_modified_index, C_MODIFIED "%c" C_NORMAL, graphchar(second_data[i]));
   }
 
-  printf("\n+0x%x ", offset);
-  for (size_t i = 0; i < size; i++)
-  {
-    if (!colorize || first_data[i] == second_data[i])
-    {
-      printf("%02x ", second_data[i]);
-      continue;
-    }
-
-    printf(C_MODIFIED "%02x " C_NORMAL, second_data[i]);
-  }
-
-  putchar('\n');
+  printf("-0x%x %s |%s|\n", offset, dump_original, ascii_original);
+  printf("+0x%x %s |%s|\n", offset, dump_modified, ascii_modified);
 }
