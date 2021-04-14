@@ -3,7 +3,6 @@ INST_DIR=/usr/local/bin
 CFLAGS= -pedantic-errors \
 	-Wall \
 	-Werror \
-	-Wno-stringop-truncation \
 	-std=c11 \
 	-I "include"
 

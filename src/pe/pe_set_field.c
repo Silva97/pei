@@ -5,6 +5,8 @@
 #include "pe.h"
 #include "pereader.h"
 
+#define min(x, y) ((x) > (y) ? (x) : (y))
+
 #define SET_NUMBER_FIELD(structure, name, field, operator, value)    \
   if (!strcmp(name, #field))                                         \
   {                                                                  \
@@ -12,11 +14,11 @@
     return true;                                                     \
   }
 
-#define SET_STRING_FIELD(structure, name, field, max_size, value) \
-  if (!strcmp(name, #field))                                      \
-  {                                                               \
-    strncpy(structure->field, value, max_size);                   \
-    return true;                                                  \
+#define SET_STRING_FIELD(structure, name, field, max_size, value)  \
+  if (!strcmp(name, #field))                                       \
+  {                                                                \
+    memcpy(structure->field, value, min(strlen(value), max_size)); \
+    return true;                                                   \
   }
 
 #define SET_FIELD_DATA_DIRECTORY(structure, name, field, subfield, operator, value)                    \
