@@ -6,7 +6,7 @@
 
 void op_show(pe_t *pe, char *info, int section, bool verbose)
 {
-  if (!strcmp(info, "dump"))
+  if (!strncmp(info, "dump", 4))
   {
     if (section < 0)
     {
@@ -15,6 +15,13 @@ void op_show(pe_t *pe, char *info, int section, bool verbose)
     }
 
     uint32_t offset = pe->section_header[section]->pointer_to_raw_data;
+
+    if (info[4] == 'r')
+    {
+      pe_dump_raw(pe, offset, pe->section_header[section]->size_of_raw_data);
+      return;
+    }
+
     pe_dump(pe, offset, pe->section_header[section]->size_of_raw_data);
     return;
   }

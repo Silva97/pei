@@ -220,23 +220,24 @@ void show_help()
        "  -s,--section <number>\n"
        "                    Do operation only on the specific section. Section is the\n"
        "                    number of the section. If this options is not specified,\n"
-       "                    by default all sections will be affected by operation.\n\n"
+       "                    by default all sections will be affected by operation.\n");
 
-       "OPERATIONS\n"
+  puts("OPERATIONS\n"
        "  s,show          Show informations about the executable. Argument specify\n"
        "                  what information to display.\n"
        "                  Possible values to argument:\n"
        "                    all   Show all informations about the executable.\n"
-       "                    dump  Dump the content of the section.\n"
+       "                    dump  Dump the content of the section in hexadecimal.\n"
+       "                    dumpr Dump the content of the section as raw data.\n"
        "                    g     General informations about the executable. (default)\n"
        "                    c     Show coff header.\n"
        "                    o     Show optional header.\n"
        "                    d     Show data directories from optional header.\n"
        "                    s     Show the specified section or all sections.\n"
        "                  Combine characters to show the informations of your choice.\n"
-       "                  Example: `pei show test.exe gc`\n\n"
+       "                  Example: `pei show test.exe gc`\n");
 
-       "  g,get           Gets the value of a specific field on a specific structure,\n"
+  puts("  g,get           Gets the value of a specific field on a specific structure,\n"
        "                  and print the value on printf like format string.\n"
        "                  The argument follow the format: structure.field\n"
        "                  Possible values to structure:\n"
@@ -247,9 +248,9 @@ void show_help()
        "                  format to print the field. Examples:\n"
        "                    pei g test.exe section.1.name '%s'\n"
        "                    pei g test.exe optional.entry_point '0x%x'\n"
-       "                    pei g test.exe optional.iat.virtual_address\n\n"
+       "                    pei g test.exe optional.iat.virtual_address\n");
 
-       "  e,edit          Following the same format to specify the field on get\n"
+  puts("  e,edit          Following the same format to specify the field on get\n"
        "                  operation, you can edit the value of the field using\n"
        "                  one of the operators:\n"
        "                    =    Sets the exactly value of the field.\n"
@@ -258,24 +259,24 @@ void show_help()
        "                  The value can be in hexadecimal, decimal or octal using\n"
        "                  the same format of C language numbers. Examples:\n"
        "                    pei e test.exe optional.entry_point = 0x12345\n"
-       "                    pei e test.exe section.0.characteristics '|=' 0x40\n\n"
+       "                    pei e test.exe section.0.characteristics '|=' 0x40\n");
 
-       "  z,zeros         Finds biggest zeroed block on sections of the executable.\n\n"
+  puts("  z,zeros         Finds biggest zeroed block on sections of the executable.\n");
 
-       "  i,inject        Injects code into the section or, if not specified, in the\n"
+  puts("  i,inject        Injects code into the section or, if not specified, in the\n"
        "                  biggest zeroed block between all sections.\n"
        "                  When inject code, the section is marked as executable and\n"
-       "                  ASLR will be disabled.\n\n"
+       "                  ASLR will be disabled.\n");
 
-       "  f,flags         Update the section flags. Argument is a list of characters\n"
+  puts("  f,flags         Update the section flags. Argument is a list of characters\n"
        "                  specifying the flags to make enabled. Any flag who is not on\n"
        "                  the list will be disabled. Example: `pei f test.exe rx`\n"
-       "                    r - read | w - write | x - execute\n\n"
+       "                    r - read | w - write | x - execute\n");
 
-       "  d,diff          Prints the differences between two executables.\n"
-       "                  Example: `pei d test1.exe test2.exe`\n\n"
+  puts("  d,diff          Prints the differences between two executables.\n"
+       "                  Example: `pei d test1.exe test2.exe`\n");
 
-       "  p,patch         Reads text with the same format as the output of the `diff'\n"
+  puts("  p,patch         Reads text with the same format as the output of the `diff'\n"
        "                  operation, and replicate the modifications. If the input file\n"
        "                  is not specified, reads the input from stdin. Examples:\n"
        "                    pei diff t1.exe t2.exe | pei patch t3.exe\n"

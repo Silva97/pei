@@ -55,6 +55,10 @@ void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
   for (i = 0; i < size; i++)
   {
     unsigned int c = fgetc(pe->file);
+    if (c == EOF)
+    {
+      return;
+    }
 
     if (i % DUMP_LINE_SIZE == 0)
     {
@@ -84,6 +88,39 @@ void pe_dump(pe_t *pe, uint32_t offset, uint32_t size)
 
   ascii[ascii_index] = '\0';
   printf("%*c|%s|\n", numbers_left, ' ', ascii);
+}
+
+#define DUMP_BLOCK_SIZE 64
+
+void pe_dump_raw(pe_t *pe, uint32_t offset, uint32_t size)
+{
+  unsigned char block_content[DUMP_BLOCK_SIZE];
+  int i;
+
+  pe_seek(pe, offset);
+
+  const int byte_count = size % DUMP_BLOCK_SIZE;
+  for (i = 0; i < byte_count; i++)
+  {
+    int c = fgetc(pe->file);
+    if (c == EOF)
+    {
+      return;
+    }
+
+    putchar(c);
+  }
+
+  const int block_count = size / DUMP_BLOCK_SIZE;
+  for (i = 0; i < block_count; i++)
+  {
+    if (!fread(block_content, DUMP_BLOCK_SIZE, 1, pe->file))
+    {
+      return;
+    }
+
+    fwrite(block_content, DUMP_BLOCK_SIZE, 1, stdout);
+  }
 }
 
 void pe_show_type(pe_t *pe)

@@ -44,6 +44,7 @@ bool pe32_set_optional_field(pe32_t *pe, char *field, pe_operator_t operator, ch
 bool pe64_set_optional_field(pe64_t *pe, char *field, pe_operator_t operator, char * value);
 
 void pe_dump(pe_t *pe, uint32_t offset, uint32_t size);
+void pe_dump_raw(pe_t *pe, uint32_t offset, uint32_t size);
 void pe_show_type(pe_t *pe);
 void pe_show_info(pe_t *pe);
 void pe_show_subsystem(pe_t *pe, bool verbose);
