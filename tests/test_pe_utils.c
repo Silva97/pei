@@ -11,15 +11,18 @@ test_t test_pe_update_entrypoint(void)
   PE_TEST_END();
 }
 
-test_t test_pe_disable_aslr(void)
+test_t test_pe_aslr(void)
 {
   PE_TEST_INIT();
 
-  // Ensure the dynamic base is enabled
+  // Make sure dynamic base is enabled
   pe64->optional_header->dll_characteristics |= DYNAMIC_BASE;
 
-  pe_disable_aslr(pe);
-  METRIC_ASSERT((pe64->optional_header->dll_characteristics & DYNAMIC_BASE) == 0);
+  pe_aslr(pe, false);
+  METRIC_ASSERT(!(pe64->optional_header->dll_characteristics & DYNAMIC_BASE));
+
+  pe_aslr(pe, true);
+  METRIC_ASSERT(pe64->optional_header->dll_characteristics & DYNAMIC_BASE);
 
   PE_TEST_END();
 }
@@ -80,7 +83,7 @@ test_t test_pe_search_biggest_zero_sequence(void)
 int main(void)
 {
   METRIC_TEST(test_pe_update_entrypoint);
-  METRIC_TEST(test_pe_disable_aslr);
+  METRIC_TEST(test_pe_aslr);
   METRIC_TEST(test_pe_offset_to_vaddress);
   METRIC_TEST(test_pe_image_base);
   METRIC_TEST(test_pe_search_address_section);
