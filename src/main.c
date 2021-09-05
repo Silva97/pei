@@ -206,7 +206,7 @@ void show_version_info()
   puts("Developed by Luiz Felipe <felipe.silva337@yahoo.com>\n"
        "Distributed under the MIT License.\n\n"
 
-       "pei v1.1.0");
+       "pei v1.2.0");
 }
 
 void show_help()
