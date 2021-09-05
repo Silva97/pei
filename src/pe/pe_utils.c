@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "operations.h"
 #include "pereader.h"
 
 uint32_t pe_update_entrypoint(pe_t *pe, uint32_t address)
@@ -21,17 +22,17 @@ uint32_t pe_update_entrypoint(pe_t *pe, uint32_t address)
   return oep;
 }
 
-void pe_disable_aslr(pe_t *pe)
+void pe_aslr(pe_t *pe, bool enable)
 {
   if (pe->type == MAGIC_32BIT)
   {
     pe32_optional_header_t *optional_header = pe->optional_header;
-    optional_header->dll_characteristics &= ~DYNAMIC_BASE;
+    SET_FLAG(optional_header->dll_characteristics, DYNAMIC_BASE, enable);
     return;
   }
 
   pe64_optional_header_t *optional_header = pe->optional_header;
-  optional_header->dll_characteristics &= ~DYNAMIC_BASE;
+  SET_FLAG(optional_header->dll_characteristics, DYNAMIC_BASE, enable);
 }
 
 int64_t pe_offset_to_vaddress(pe_t *pe, uint32_t offset)
