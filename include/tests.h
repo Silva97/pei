@@ -12,7 +12,7 @@
 
 #define PE_TEST_INIT()                   \
   pe_t *pe = pe_parse(pe_open(TEST_PE)); \
-  pe64_t *pe64 = (pe64_t *)pe
+  pe64_t *pe64 __attribute__((unused)) = (pe64_t *)pe
 
 #define PE_TEST_END() \
   pe_free(pe);        \
