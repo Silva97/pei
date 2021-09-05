@@ -156,6 +156,14 @@ int main(int argc, char **argv)
     char *flags = argv[optind + 2];
     op_flags(pe, flags, section_number);
     break;
+  case 'a':
+    validate_operation(operation, "aslr");
+    char *status = (pos_argc >= 3)
+                       ? argv[optind + 2]
+                       : NULL;
+
+    op_aslr(pe, status);
+    break;
   case 'd':
     validate_operation(operation, "diff");
     if (pos_argc < 3)
@@ -272,6 +280,12 @@ void show_help()
        "                  specifying the flags to make enabled. Any flag who is not on\n"
        "                  the list will be disabled. Example: `pei f test.exe rx`\n"
        "                    r - read | w - write | x - execute\n");
+
+  puts("  a,aslr          Show if ASLR are enabled. With an extra argument it will\n"
+       "                  enable or disable the ASLR. Examples:\n"
+       "                    pei aslr test.exe\n"
+       "                    pei aslr test.exe on\n"
+       "                    pei aslr test.exe off\n");
 
   puts("  d,diff          Prints the differences between two executables.\n"
        "                  Example: `pei d test1.exe test2.exe`\n");
