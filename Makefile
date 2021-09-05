@@ -10,10 +10,10 @@ src2obj = $(subst .c,.o,$(1))
 SRC=$(wildcard src/operations/*.c src/pe/*.c src/utils/*.c)
 OBJ=$(call src2obj,$(SRC))
 
-all: CFLAGS += -O2
+all: CFLAGS += -O2 -march=native
 all: compile
 
-debug: CFLAGS += -ggdb
+debug: CFLAGS += -g3
 debug: compile
 
 compile: $(OBJ) compile_main
