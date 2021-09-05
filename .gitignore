@@ -1,5 +1,13 @@
-*.o
+/.vscode
+/bin
+/Testing
+/build
+
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+CMakeCache.txt
+CMakeFiles
+install_manifest.txt
+
 *.exe
-/obj
-/pei
-/metric_test

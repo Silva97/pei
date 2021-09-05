@@ -29,5 +29,5 @@ int main(void)
 {
   METRIC_TEST(test_pe_write_header);
 
-  return METRIC_TEST_END();
+  METRIC_TEST_END();
 }

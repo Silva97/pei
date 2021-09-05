@@ -46,5 +46,5 @@ int main(void)
   METRIC_TEST(test_open_pe_executable);
   METRIC_TEST(test_parse_pe_executable);
 
-  return METRIC_TEST_END();
+  METRIC_TEST_END();
 }

@@ -90,5 +90,5 @@ int main(void)
   METRIC_TEST(test_pe_search_entrypoint_section);
   METRIC_TEST(test_pe_search_biggest_zero_sequence);
 
-  return METRIC_TEST_END();
+  METRIC_TEST_END();
 }

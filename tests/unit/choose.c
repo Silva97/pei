@@ -33,5 +33,5 @@ int main(void)
 {
   METRIC_TEST(test_choose);
 
-  return METRIC_TEST_END();
+  METRIC_TEST_END();
 }

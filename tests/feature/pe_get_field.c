@@ -133,5 +133,5 @@ int main(void)
   METRIC_TEST(test_get_optional_fields);
   METRIC_TEST(test_get_section_fields);
 
-  return METRIC_TEST_END();
+  METRIC_TEST_END();
 }

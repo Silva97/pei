@@ -117,5 +117,5 @@ int main(void)
   METRIC_TEST(test_set_optional_fields);
   METRIC_TEST(test_set_section_fields);
 
-  return METRIC_TEST_END();
+  METRIC_TEST_END();
 }
