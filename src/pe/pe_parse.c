@@ -83,6 +83,11 @@ pe_t *pe_parse(FILE *executable)
 
     if (!fread(pe->section_header[i], sizeof(pe_section_header_t), 1, executable))
     {
+      for (int n = i; n >= 0; n--)
+      {
+        free(pe->section_header[n]);
+      }
+
       goto free_and_return_null;
     }
   }
