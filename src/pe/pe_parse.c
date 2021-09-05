@@ -1,6 +1,6 @@
+#include "pereader.h"
 #include <stdlib.h>
 #include <string.h>
-#include "pereader.h"
 
 static void mem_error(void)
 {

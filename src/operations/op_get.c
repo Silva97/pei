@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include "operations.h"
+#include <stdlib.h>
 
 void op_get(pe_t *pe, char *field_string, const char *format)
 {

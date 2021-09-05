@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include "operations.h"
+#include <stdlib.h>
 
 static const char *status_name[] = {
     "disabled",

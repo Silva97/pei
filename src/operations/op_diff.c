@@ -1,7 +1,7 @@
+#include "operations.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "operations.h"
 
 #define C_ORIGINAL "\x1b[31m"
 #define C_MODIFIED "\x1b[32m"

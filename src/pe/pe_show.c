@@ -1,9 +1,9 @@
+#include "pereader.h"
+#include "choose.h"
 #include <string.h>
 #include <inttypes.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "pereader.h"
-#include "choose.h"
 
 // These macro should be an even number or pe_dump doesn't works properly.
 #define DUMP_LINE_SIZE 16

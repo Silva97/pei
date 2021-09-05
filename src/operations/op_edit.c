@@ -1,6 +1,6 @@
+#include "operations.h"
 #include <stdlib.h>
 #include <string.h>
-#include "operations.h"
 
 void op_edit(pe_t *pe, char *field_string, char *operator, char * value)
 {

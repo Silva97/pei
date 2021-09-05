@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include "operations.h"
+#include <stdlib.h>
 
 #define INFO(info, expected) \
   (!strcmp(info, "all") || strchr(info, expected))

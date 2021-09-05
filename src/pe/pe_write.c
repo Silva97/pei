@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "pereader.h"
+#include <stdio.h>
 
 void pe_seek(pe_t *pe, long int offset)
 {

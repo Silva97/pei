@@ -1,7 +1,6 @@
-#include "win.h"
+#include "operations.h"
 #include <stdlib.h>
 #include <ctype.h>
-#include "operations.h"
 
 #define LINE_SIZE 255
 
