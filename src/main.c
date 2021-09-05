@@ -74,7 +74,7 @@ int main(int argc, char **argv)
   int pos_argc = argc - optind;
   if (pos_argc < 2)
   {
-    show_error("More %d positional arguments is required.\nSee help: pei -h", 2 - pos_argc);
+    show_error("More %d positional arguments are required.\nSee help: pei -h", 2 - pos_argc);
   }
 
   char *operation = argv[optind];
@@ -89,6 +89,11 @@ int main(int argc, char **argv)
   if (!pe)
   {
     show_error("File '%s' is corrupted or is not a valid PE32 or PE32+ executable.", filename);
+  }
+
+  if (section_number >= pe->number_of_sections)
+  {
+    show_error("Section number %d is invalid. The executable has %d sections.", section_number, pe->number_of_sections);
   }
 
   // Operations
