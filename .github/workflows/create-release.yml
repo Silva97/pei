@@ -34,7 +34,7 @@ jobs:
       run: cmake --build ${{github.workspace}} --config ${{env.BUILD_TYPE}}
 
     - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          files: ${{github.workspace}}/bin/pei.exe
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: ${{github.workspace}}/bin/pei.exe
