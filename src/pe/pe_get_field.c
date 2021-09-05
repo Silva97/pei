@@ -4,31 +4,6 @@
 #include "pe.h"
 #include "pereader.h"
 
-#define GET_FIELD(structure, name, field)    \
-  if (!strcmp(name, #field))                 \
-  {                                          \
-    sprintf(buff, format, structure->field); \
-    return true;                             \
-  }
-
-#define GET_FIELD_DATA_DIRECTORY(structure, name, field, subfield) \
-  if (!strcmp(name, #field))                                       \
-  {                                                                \
-    if (!strcmp(subfield, "virtual_address"))                      \
-    {                                                              \
-      sprintf(buff, format, structure->field.virtual_address);     \
-    }                                                              \
-    else if (!strcmp(subfield, "size"))                            \
-    {                                                              \
-      sprintf(buff, format, structure->field.size);                \
-    }                                                              \
-    else                                                           \
-    {                                                              \
-      return false;                                                \
-    }                                                              \
-    return true;                                                   \
-  }
-
 bool pe_get_field(pe_t *pe, char *buff, char *field_string, const char *format)
 {
   unsigned int section = -1;

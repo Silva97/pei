@@ -5,43 +5,6 @@
 #include "pereader.h"
 #include "choose.h"
 
-#define PALIGN "%-32s"
-
-#define PRINT_FIELD_N(structure, mask, field_name) \
-  printf(                                          \
-      PALIGN "%0*" mask,                           \
-      #field_name,                                 \
-      (int)sizeof structure->field_name * 2,       \
-      structure->field_name)
-
-#define PRINT_FIELD(structure, mask, field_name) \
-  PRINT_FIELD_N(structure, mask "\n", field_name)
-
-#define PRINT_ALIGNED_N(text, mask, ...) \
-  printf(PALIGN mask, text, __VA_ARGS__)
-
-#define PRINT_ALIGNED(text, mask, ...) \
-  PRINT_ALIGNED_N(text, mask "\n", __VA_ARGS__)
-
-#define PRINT_FLAG(value, flag, show_separator) \
-  {                                             \
-    if (value & flag)                           \
-    {                                           \
-      if (show_separator)                       \
-      {                                         \
-        putchar('|');                           \
-      }                                         \
-      fputs(#flag, stdout);                     \
-      show_separator = true;                    \
-    }                                           \
-  }
-
-#define PRINT_DATA_DIRECTORY(optional_header, directory)    \
-  PRINT_ALIGNED(#directory,                                 \
-                "{ virtual_address: %08x, size: %08x }",    \
-                optional_header->directory.virtual_address, \
-                optional_header->directory.size)
-
 // These macro should be an even number or pe_dump doesn't works properly.
 #define DUMP_LINE_SIZE 16
 

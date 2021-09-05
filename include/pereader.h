@@ -72,4 +72,66 @@ int pe_search_entrypoint_section(pe_t *pe);
 pe_block_t pe_search_biggest_zero_sequence_on_section(pe_t *pe, unsigned int section);
 pe_block_t pe_search_biggest_zero_sequence(pe_t *pe);
 
+#define PALIGN "%-32s"
+
+#define PRINT_FIELD_N(structure, mask, field_name) \
+  printf(                                          \
+      PALIGN "%0*" mask,                           \
+      #field_name,                                 \
+      (int)sizeof structure->field_name * 2,       \
+      structure->field_name)
+
+#define PRINT_FIELD(structure, mask, field_name) \
+  PRINT_FIELD_N(structure, mask "\n", field_name)
+
+#define PRINT_ALIGNED_N(text, mask, ...) \
+  printf(PALIGN mask, text, __VA_ARGS__)
+
+#define PRINT_ALIGNED(text, mask, ...) \
+  PRINT_ALIGNED_N(text, mask "\n", __VA_ARGS__)
+
+#define PRINT_FLAG(value, flag, show_separator) \
+  {                                             \
+    if (value & flag)                           \
+    {                                           \
+      if (show_separator)                       \
+      {                                         \
+        putchar('|');                           \
+      }                                         \
+      fputs(#flag, stdout);                     \
+      show_separator = true;                    \
+    }                                           \
+  }
+
+#define PRINT_DATA_DIRECTORY(optional_header, directory)    \
+  PRINT_ALIGNED(#directory,                                 \
+                "{ virtual_address: %08x, size: %08x }",    \
+                optional_header->directory.virtual_address, \
+                optional_header->directory.size)
+
+#define GET_FIELD(structure, name, field)    \
+  if (!strcmp(name, #field))                 \
+  {                                          \
+    sprintf(buff, format, structure->field); \
+    return true;                             \
+  }
+
+#define GET_FIELD_DATA_DIRECTORY(structure, name, field, subfield) \
+  if (!strcmp(name, #field))                                       \
+  {                                                                \
+    if (!strcmp(subfield, "virtual_address"))                      \
+    {                                                              \
+      sprintf(buff, format, structure->field.virtual_address);     \
+    }                                                              \
+    else if (!strcmp(subfield, "size"))                            \
+    {                                                              \
+      sprintf(buff, format, structure->field.size);                \
+    }                                                              \
+    else                                                           \
+    {                                                              \
+      return false;                                                \
+    }                                                              \
+    return true;                                                   \
+  }
+
 #endif /* _PEREADER_H */
